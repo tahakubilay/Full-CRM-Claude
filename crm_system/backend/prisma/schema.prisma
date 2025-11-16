@@ -1,0 +1,484 @@
+// KULLANIM: Bu dosyayı backend/prisma/schema.prisma olarak kaydedin
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  password      String
+  firstName     String?
+  lastName      String?
+  role          UserRole  @default(USER)
+  permissions   Json?
+  isActive      Boolean   @default(true)
+  lastLogin     DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  createdCompanies     Company[]             @relation("CompanyCreator")
+  createdBrands        Brand[]               @relation("BrandCreator")
+  createdBranches      Branch[]              @relation("BranchCreator")
+  createdPeople        Person[]              @relation("PersonCreator")
+  createdDocuments     Document[]            @relation("DocumentCreator")
+  createdTemplates     Template[]            @relation("TemplateCreator")
+  createdReports       Report[]              @relation("ReportCreator")
+  createdCalendarEvents CalendarEvent[]      @relation("CalendarEventCreator")
+  createdPresentations Presentation[]        @relation("PresentationCreator")
+  activities           Activity[]
+  notifications        Notification[]
+  auditLogs            AuditLog[]
+  settingsUpdates      Setting[]
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@map("users")
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  USER
+  GUEST
+}
+
+model Company {
+  id          String        @id @default(uuid())
+  logo        String?
+  companyName String
+  taxNumber   String?
+  country     String?
+  city        String?
+  district    String?
+  address     String?
+  phones      Json?
+  emails      Json?
+  iban        String?
+  taxPlate    String?
+  themeColor  String        @default("#3B82F6")
+  status      EntityStatus  @default(ACTIVE)
+  createdBy   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  creator       User          @relation("CompanyCreator", fields: [createdBy], references: [id])
+  brands        Brand[]
+  documents     Document[]    @relation("CompanyDocuments")
+  reports       Report[]      @relation("CompanyReports")
+  investments   Investment[]  @relation("CompanyInvestments")
+  calendarEvents CalendarEvent[] @relation("CompanyEvents")
+  presentations Presentation[] @relation("CompanyPresentations")
+
+  @@index([companyName])
+  @@index([taxNumber])
+  @@index([status])
+  @@index([createdBy])
+  @@map("companies")
+}
+
+model Brand {
+  id          String        @id @default(uuid())
+  companyId   String
+  logo        String?
+  brandName   String
+  taxNumber   String?
+  country     String?
+  city        String?
+  district    String?
+  address     String?
+  phones      Json?
+  emails      Json?
+  iban        String?
+  themeColor  String?
+  status      EntityStatus  @default(ACTIVE)
+  createdBy   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  company       Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  creator       User          @relation("BrandCreator", fields: [createdBy], references: [id])
+  branches      Branch[]
+  documents     Document[]    @relation("BrandDocuments")
+  reports       Report[]      @relation("BrandReports")
+  investments   Investment[]  @relation("BrandInvestments")
+  calendarEvents CalendarEvent[] @relation("BrandEvents")
+  presentations Presentation[] @relation("BrandPresentations")
+
+  @@index([companyId])
+  @@index([brandName])
+  @@index([status])
+  @@map("brands")
+}
+
+model Branch {
+  id          String        @id @default(uuid())
+  brandId     String
+  logo        String?
+  branchName  String
+  sgkNumber   String?
+  country     String?
+  city        String?
+  district    String?
+  address     String?
+  phones      Json?
+  emails      Json?
+  iban        String?
+  status      EntityStatus  @default(ACTIVE)
+  createdBy   String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  brand         Brand         @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  creator       User          @relation("BranchCreator", fields: [createdBy], references: [id])
+  people        Person[]
+  documents     Document[]    @relation("BranchDocuments")
+  reports       Report[]      @relation("BranchReports")
+  investments   Investment[]  @relation("BranchInvestments")
+  calendarEvents CalendarEvent[] @relation("BranchEvents")
+  presentations Presentation[] @relation("BranchPresentations")
+
+  @@index([brandId])
+  @@index([branchName])
+  @@index([status])
+  @@map("branches")
+}
+
+model Person {
+  id              String        @id @default(uuid())
+  branchId        String?
+  photo           String?
+  firstName       String
+  lastName        String
+  nationalId      String?
+  country         String?
+  city            String?
+  district        String?
+  address         String?
+  phones          Json?
+  emails          Json?
+  ibans           Json?
+  role            String?
+  customRole      String?
+  investmentData  Json?
+  status          EntityStatus  @default(ACTIVE)
+  createdBy       String
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  branch          Branch?       @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  creator         User          @relation("PersonCreator", fields: [createdBy], references: [id])
+  investments     Investment[]
+  documents       Document[]    @relation("PersonDocuments")
+  reports         Report[]      @relation("PersonReports")
+  calendarEvents  CalendarEvent[] @relation("PersonEvents")
+  presentations   Presentation[] @relation("PersonPresentations")
+
+  @@index([branchId])
+  @@index([firstName, lastName])
+  @@index([role])
+  @@index([status])
+  @@map("people")
+}
+
+enum EntityStatus {
+  ACTIVE
+  DRAFT
+  ARCHIVED
+}
+
+model Investment {
+  id                String          @id @default(uuid())
+  personId          String
+  investmentType    InvestmentType
+  targetId          String
+  investmentDate    DateTime
+  sharePercentage   Decimal?        @db.Decimal(5, 2)
+  investmentAmount  Decimal         @db.Decimal(15, 2)
+  amortization      Int
+  monthlyReturn     Decimal         @db.Decimal(15, 2)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  person            Person          @relation(fields: [personId], references: [id], onDelete: Cascade)
+  company           Company?        @relation("CompanyInvestments", fields: [targetId], references: [id], map: "investment_company_fkey")
+  brand             Brand?          @relation("BrandInvestments", fields: [targetId], references: [id], map: "investment_brand_fkey")
+  branch            Branch?         @relation("BranchInvestments", fields: [targetId], references: [id], map: "investment_branch_fkey")
+
+  @@index([personId])
+  @@index([targetId])
+  @@index([investmentType])
+  @@map("investments")
+}
+
+enum InvestmentType {
+  COMPANY
+  BRAND
+  BRANCH
+}
+
+model Document {
+  id            String        @id @default(uuid())
+  name          String
+  type          String?
+  documentDate  DateTime?
+  entityType    EntityType
+  entityId      String
+  templateId    String?
+  fileUrl       String?
+  fileSize      Int?
+  mimeType      String?
+  content       String?       @db.Text
+  metadata      Json?
+  status        EntityStatus  @default(ACTIVE)
+  version       Int           @default(1)
+  createdBy     String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  template      Template?     @relation(fields: [templateId], references: [id])
+  creator       User          @relation("DocumentCreator", fields: [createdBy], references: [id])
+  company       Company?      @relation("CompanyDocuments", fields: [entityId], references: [id], map: "document_company_fkey")
+  brand         Brand?        @relation("BrandDocuments", fields: [entityId], references: [id], map: "document_brand_fkey")
+  branch        Branch?       @relation("BranchDocuments", fields: [entityId], references: [id], map: "document_branch_fkey")
+  person        Person?       @relation("PersonDocuments", fields: [entityId], references: [id], map: "document_person_fkey")
+
+  @@index([entityType, entityId])
+  @@index([type])
+  @@index([status])
+  @@index([createdBy])
+  @@map("documents")
+}
+
+model Template {
+  id            String          @id @default(uuid())
+  name          String
+  type          String?
+  category      TemplateCategory
+  content       String          @db.Text
+  placeholders  Json?
+  styling       Json?
+  version       Int             @default(1)
+  isActive      Boolean         @default(true)
+  usageCount    Int             @default(0)
+  createdBy     String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  creator       User            @relation("TemplateCreator", fields: [createdBy], references: [id])
+  documents     Document[]
+
+  @@index([type])
+  @@index([category])
+  @@index([isActive])
+  @@map("templates")
+}
+
+enum TemplateCategory {
+  COMPANY
+  BRAND
+  BRANCH
+  PERSON
+  GENERAL
+}
+
+enum EntityType {
+  COMPANY
+  BRAND
+  BRANCH
+  PERSON
+}
+
+model Report {
+  id            String        @id @default(uuid())
+  name          String
+  reportType    String?
+  entityType    EntityType?
+  entityId      String?
+  templateId    String?
+  data          Json?
+  fileUrl       String?
+  status        EntityStatus  @default(ACTIVE)
+  generatedAt   DateTime?
+  createdBy     String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  creator       User          @relation("ReportCreator", fields: [createdBy], references: [id])
+  company       Company?      @relation("CompanyReports", fields: [entityId], references: [id], map: "report_company_fkey")
+  brand         Brand?        @relation("BrandReports", fields: [entityId], references: [id], map: "report_brand_fkey")
+  branch        Branch?       @relation("BranchReports", fields: [entityId], references: [id], map: "report_branch_fkey")
+  person        Person?       @relation("PersonReports", fields: [entityId], references: [id], map: "report_person_fkey")
+
+  @@index([entityType, entityId])
+  @@index([reportType])
+  @@index([status])
+  @@map("reports")
+}
+
+model CalendarEvent {
+  id                String            @id @default(uuid())
+  title             String
+  type              String?
+  startDate         DateTime
+  endDate           DateTime
+  isAllDay          Boolean           @default(false)
+  recurrence        Json?
+  entityType        EntityType?
+  entityId          String?
+  participants      Json?
+  location          String?
+  notes             String?           @db.Text
+  attachments       Json?
+  priority          EventPriority     @default(MEDIUM)
+  status            EventStatus       @default(PLANNED)
+  reminderSettings  Json?
+  color             String?
+  createdBy         String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  creator           User              @relation("CalendarEventCreator", fields: [createdBy], references: [id])
+  company           Company?          @relation("CompanyEvents", fields: [entityId], references: [id], map: "calendar_company_fkey")
+  brand             Brand?            @relation("BrandEvents", fields: [entityId], references: [id], map: "calendar_brand_fkey")
+  branch            Branch?           @relation("BranchEvents", fields: [entityId], references: [id], map: "calendar_branch_fkey")
+  person            Person?           @relation("PersonEvents", fields: [entityId], references: [id], map: "calendar_person_fkey")
+
+  @@index([startDate, endDate])
+  @@index([type])
+  @@index([status])
+  @@index([entityType, entityId])
+  @@map("calendar_events")
+}
+
+enum EventPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum EventStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Presentation {
+  id            String        @id @default(uuid())
+  name          String
+  entityType    EntityType?
+  entityId      String?
+  templateId    String?
+  slides        Json
+  theme         Json?
+  status        EntityStatus  @default(DRAFT)
+  shareToken    String?       @unique
+  views         Int           @default(0)
+  lastViewedAt  DateTime?
+  version       Int           @default(1)
+  createdBy     String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  creator       User          @relation("PresentationCreator", fields: [createdBy], references: [id])
+  company       Company?      @relation("CompanyPresentations", fields: [entityId], references: [id], map: "presentation_company_fkey")
+  brand         Brand?        @relation("BrandPresentations", fields: [entityId], references: [id], map: "presentation_brand_fkey")
+  branch        Branch?       @relation("BranchPresentations", fields: [entityId], references: [id], map: "presentation_branch_fkey")
+  person        Person?       @relation("PersonPresentations", fields: [entityId], references: [id], map: "presentation_person_fkey")
+
+  @@index([entityType, entityId])
+  @@index([status])
+  @@index([shareToken])
+  @@map("presentations")
+}
+
+model Activity {
+  id            String    @id @default(uuid())
+  entityType    String
+  entityId      String
+  action        String
+  description   String?   @db.Text
+  metadata      Json?
+  performedBy   String
+  ipAddress     String?
+  userAgent     String?   @db.Text
+  createdAt     DateTime  @default(now())
+
+  user          User      @relation(fields: [performedBy], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([action])
+  @@index([performedBy])
+  @@index([createdAt])
+  @@map("activities")
+}
+
+model AuditLog {
+  id            String      @id @default(uuid())
+  tableName     String
+  recordId      String
+  action        AuditAction
+  oldData       Json?
+  newData       Json?
+  changedFields Json?
+  performedBy   String
+  ipAddress     String?
+  createdAt     DateTime    @default(now())
+
+  user          User        @relation(fields: [performedBy], references: [id])
+
+  @@index([tableName, recordId])
+  @@index([action])
+  @@index([performedBy])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+model Notification {
+  id        String    @id @default(uuid())
+  userId    String
+  type      String
+  title     String
+  message   String?   @db.Text
+  data      Json?
+  isRead    Boolean   @default(false)
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+model Setting {
+  id        String    @id @default(uuid())
+  category  String
+  key       String
+  value     Json
+  isPublic  Boolean   @default(false)
+  updatedBy String?
+  updatedAt DateTime  @updatedAt
+
+  user      User?     @relation(fields: [updatedBy], references: [id])
+
+  @@unique([category, key])
+  @@index([category])
+  @@map("settings")
+}
