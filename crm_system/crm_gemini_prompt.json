@@ -1,0 +1,3213 @@
+{
+  "project": {
+    "name": "Professional CRM System",
+    "version": "1.0.0",
+    "description": "Kapsamlı, hiyerarşik yapıda, profesyonel CRM sistemi - Şirketler, Markalar, Şubeler, Kişiler yönetimi ile tam entegre finansal raporlama, belge yönetimi, takvim ve sunum araçları",
+    "type": "full-stack-web-application",
+    "priority": "production-ready"
+  },
+  
+  "technology_stack": {
+    "frontend": {
+      "framework": "React 18+ with TypeScript",
+      "ui_library": "Tailwind CSS + Shadcn/ui components",
+      "state_management": "Redux Toolkit or Zustand",
+      "form_handling": "React Hook Form + Zod validation",
+      "routing": "React Router v6",
+      "date_picker": "react-datepicker or date-fns",
+      "rich_text_editor": "TipTap or Quill.js",
+      "drag_and_drop": "dnd-kit or react-beautiful-dnd",
+      "charts": "Recharts or Chart.js",
+      "pdf_generation": "jsPDF or react-pdf",
+      "excel_export": "xlsx or exceljs",
+      "calendar": "FullCalendar or react-big-calendar",
+      "notifications": "react-toastify",
+      "icons": "Lucide React",
+      "http_client": "Axios"
+    },
+    "backend": {
+      "framework": "Node.js + Express.js or NestJS (TypeScript)",
+      "orm": "Prisma or TypeORM",
+      "database": "PostgreSQL (primary) + Redis (cache)",
+      "authentication": "JWT + Refresh Tokens",
+      "authorization": "RBAC (Role-Based Access Control)",
+      "file_storage": "AWS S3 or MinIO (local alternative)",
+      "email": "Nodemailer + SMTP",
+      "pdf_generation": "Puppeteer or PDFKit",
+      "validation": "Zod or Joi",
+      "logging": "Winston or Pino",
+      "api_documentation": "Swagger/OpenAPI"
+    },
+    "devops": {
+      "containerization": "Docker + Docker Compose",
+      "ci_cd": "GitHub Actions or GitLab CI",
+      "monitoring": "Prometheus + Grafana",
+      "error_tracking": "Sentry"
+    }
+  },
+
+  "architecture": {
+    "pattern": "Clean Architecture + Domain-Driven Design",
+    "folder_structure": {
+      "frontend": [
+        "src/",
+        "├── components/",
+        "│   ├── layout/",
+        "│   │   ├── Navbar.tsx",
+        "│   │   ├── Sidebar.tsx",
+        "│   │   └── Footer.tsx",
+        "│   ├── common/",
+        "│   │   ├── Button.tsx",
+        "│   │   ├── Input.tsx",
+        "│   │   ├── Select.tsx",
+        "│   │   ├── Checkbox.tsx",
+        "│   │   ├── Modal.tsx",
+        "│   │   ├── Table.tsx",
+        "│   │   ├── FilterBar.tsx",
+        "│   │   ├── SearchBar.tsx",
+        "│   │   └── LoadingSpinner.tsx",
+        "│   ├── companies/",
+        "│   ├── brands/",
+        "│   ├── branches/",
+        "│   ├── people/",
+        "│   ├── reports/",
+        "│   ├── documents/",
+        "│   ├── templates/",
+        "│   ├── calendar/",
+        "│   └── presentations/",
+        "├── pages/",
+        "│   ├── Dashboard.tsx",
+        "│   ├── Login.tsx",
+        "│   ├── Companies/",
+        "│   ├── Brands/",
+        "│   ├── Branches/",
+        "│   ├── People/",
+        "│   ├── Reports/",
+        "│   ├── Documents/",
+        "│   ├── Templates/",
+        "│   ├── Calendar/",
+        "│   ├── Presentations/",
+        "│   └── Settings/",
+        "├── services/",
+        "│   ├── api.ts",
+        "│   ├── auth.service.ts",
+        "│   ├── company.service.ts",
+        "│   └── ...",
+        "├── store/",
+        "│   ├── slices/",
+        "│   └── store.ts",
+        "├── hooks/",
+        "│   ├── useAuth.ts",
+        "│   ├── usePermissions.ts",
+        "│   └── ...",
+        "├── utils/",
+        "│   ├── helpers.ts",
+        "│   ├── validators.ts",
+        "│   └── constants.ts",
+        "├── types/",
+        "│   └── index.ts",
+        "└── App.tsx"
+      ],
+      "backend": [
+        "src/",
+        "├── modules/",
+        "│   ├── auth/",
+        "│   ├── users/",
+        "│   ├── companies/",
+        "│   ├── brands/",
+        "│   ├── branches/",
+        "│   ├── people/",
+        "│   ├── reports/",
+        "│   ├── documents/",
+        "│   ├── templates/",
+        "│   ├── calendar/",
+        "│   └── presentations/",
+        "├── common/",
+        "│   ├── middlewares/",
+        "│   ├── guards/",
+        "│   ├── decorators/",
+        "│   ├── filters/",
+        "│   └── interceptors/",
+        "├── database/",
+        "│   ├── migrations/",
+        "│   ├── seeds/",
+        "│   └── prisma.schema",
+        "├── config/",
+        "│   └── configuration.ts",
+        "└── main.ts"
+      ]
+    }
+  },
+
+  "database_schema": {
+    "entities": {
+      "users": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "email": "VARCHAR(255) UNIQUE NOT NULL",
+          "password": "VARCHAR(255) NOT NULL",
+          "firstName": "VARCHAR(100)",
+          "lastName": "VARCHAR(100)",
+          "role": "ENUM('ADMIN', 'MANAGER', 'USER', 'GUEST')",
+          "permissions": "JSONB",
+          "isActive": "BOOLEAN DEFAULT true",
+          "lastLogin": "TIMESTAMP",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["email", "role", "isActive"]
+      },
+      "companies": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "logo": "VARCHAR(500)",
+          "companyName": "VARCHAR(255) NOT NULL",
+          "taxNumber": "VARCHAR(50)",
+          "country": "VARCHAR(100)",
+          "city": "VARCHAR(100)",
+          "district": "VARCHAR(100)",
+          "address": "TEXT",
+          "phones": "JSONB",
+          "emails": "JSONB",
+          "iban": "VARCHAR(50)",
+          "taxPlate": "VARCHAR(500)",
+          "themeColor": "VARCHAR(7) DEFAULT '#3B82F6'",
+          "status": "ENUM('ACTIVE', 'DRAFT', 'ARCHIVED') DEFAULT 'ACTIVE'",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["companyName", "taxNumber", "status", "createdBy"],
+        "relations": {
+          "brands": "ONE_TO_MANY",
+          "documents": "ONE_TO_MANY",
+          "reports": "ONE_TO_MANY"
+        }
+      },
+      "brands": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "companyId": "UUID REFERENCES companies(id) ON DELETE CASCADE",
+          "logo": "VARCHAR(500)",
+          "brandName": "VARCHAR(255) NOT NULL",
+          "taxNumber": "VARCHAR(50)",
+          "country": "VARCHAR(100)",
+          "city": "VARCHAR(100)",
+          "district": "VARCHAR(100)",
+          "address": "TEXT",
+          "phones": "JSONB",
+          "emails": "JSONB",
+          "iban": "VARCHAR(50)",
+          "themeColor": "VARCHAR(7)",
+          "status": "ENUM('ACTIVE', 'DRAFT', 'ARCHIVED') DEFAULT 'ACTIVE'",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["companyId", "brandName", "status"],
+        "relations": {
+          "company": "MANY_TO_ONE",
+          "branches": "ONE_TO_MANY",
+          "documents": "ONE_TO_MANY",
+          "reports": "ONE_TO_MANY"
+        }
+      },
+      "branches": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "brandId": "UUID REFERENCES brands(id) ON DELETE CASCADE",
+          "logo": "VARCHAR(500)",
+          "branchName": "VARCHAR(255) NOT NULL",
+          "sgkNumber": "VARCHAR(50)",
+          "country": "VARCHAR(100)",
+          "city": "VARCHAR(100)",
+          "district": "VARCHAR(100)",
+          "address": "TEXT",
+          "phones": "JSONB",
+          "emails": "JSONB",
+          "iban": "VARCHAR(50)",
+          "status": "ENUM('ACTIVE', 'DRAFT', 'ARCHIVED') DEFAULT 'ACTIVE'",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["brandId", "branchName", "status"],
+        "relations": {
+          "brand": "MANY_TO_ONE",
+          "people": "ONE_TO_MANY",
+          "documents": "ONE_TO_MANY",
+          "reports": "ONE_TO_MANY"
+        }
+      },
+      "people": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "branchId": "UUID REFERENCES branches(id) ON DELETE SET NULL",
+          "photo": "VARCHAR(500)",
+          "firstName": "VARCHAR(100) NOT NULL",
+          "lastName": "VARCHAR(100) NOT NULL",
+          "nationalId": "VARCHAR(50)",
+          "country": "VARCHAR(100)",
+          "city": "VARCHAR(100)",
+          "district": "VARCHAR(100)",
+          "address": "TEXT",
+          "phones": "JSONB",
+          "emails": "JSONB",
+          "ibans": "JSONB",
+          "role": "VARCHAR(100)",
+          "customRole": "VARCHAR(100)",
+          "investmentData": "JSONB",
+          "status": "ENUM('ACTIVE', 'DRAFT', 'ARCHIVED') DEFAULT 'ACTIVE'",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["branchId", "firstName", "lastName", "role", "status"],
+        "relations": {
+          "branch": "MANY_TO_ONE",
+          "documents": "ONE_TO_MANY",
+          "reports": "ONE_TO_MANY",
+          "investments": "ONE_TO_MANY"
+        }
+      },
+      "investments": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "personId": "UUID REFERENCES people(id) ON DELETE CASCADE",
+          "investmentType": "ENUM('COMPANY', 'BRAND', 'BRANCH')",
+          "targetId": "UUID NOT NULL",
+          "investmentDate": "DATE NOT NULL",
+          "sharePercentage": "DECIMAL(5,2)",
+          "investmentAmount": "DECIMAL(15,2)",
+          "amortization": "INTEGER",
+          "monthlyReturn": "DECIMAL(15,2)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["personId", "targetId", "investmentType"]
+      },
+      "documents": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(255) NOT NULL",
+          "type": "VARCHAR(100)",
+          "documentDate": "DATE",
+          "entityType": "ENUM('COMPANY', 'BRAND', 'BRANCH', 'PERSON')",
+          "entityId": "UUID NOT NULL",
+          "templateId": "UUID REFERENCES templates(id)",
+          "fileUrl": "VARCHAR(500)",
+          "fileSize": "INTEGER",
+          "mimeType": "VARCHAR(100)",
+          "content": "TEXT",
+          "metadata": "JSONB",
+          "status": "ENUM('ACTIVE', 'DRAFT', 'ARCHIVED') DEFAULT 'ACTIVE'",
+          "version": "INTEGER DEFAULT 1",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["entityType", "entityId", "type", "status", "createdBy"],
+        "relations": {
+          "template": "MANY_TO_ONE",
+          "versions": "ONE_TO_MANY"
+        }
+      },
+      "templates": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(255) NOT NULL",
+          "type": "VARCHAR(100)",
+          "category": "ENUM('COMPANY', 'BRAND', 'BRANCH', 'PERSON', 'GENERAL')",
+          "content": "TEXT NOT NULL",
+          "placeholders": "JSONB",
+          "styling": "JSONB",
+          "version": "INTEGER DEFAULT 1",
+          "isActive": "BOOLEAN DEFAULT true",
+          "usageCount": "INTEGER DEFAULT 0",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["type", "category", "isActive"]
+      },
+      "reports": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(255) NOT NULL",
+          "reportType": "VARCHAR(100)",
+          "entityType": "ENUM('COMPANY', 'BRAND', 'BRANCH', 'PERSON')",
+          "entityId": "UUID",
+          "templateId": "UUID REFERENCES report_templates(id)",
+          "data": "JSONB",
+          "fileUrl": "VARCHAR(500)",
+          "status": "ENUM('ACTIVE', 'DRAFT', 'ARCHIVED') DEFAULT 'ACTIVE'",
+          "generatedAt": "TIMESTAMP",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["entityType", "entityId", "reportType", "status"]
+      },
+      "report_templates": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(255) NOT NULL",
+          "type": "VARCHAR(100)",
+          "category": "VARCHAR(100)",
+          "structure": "JSONB NOT NULL",
+          "calculations": "JSONB",
+          "styling": "JSONB",
+          "isActive": "BOOLEAN DEFAULT true",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        }
+      },
+      "calendar_events": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "title": "VARCHAR(255) NOT NULL",
+          "type": "VARCHAR(50)",
+          "startDate": "TIMESTAMP NOT NULL",
+          "endDate": "TIMESTAMP NOT NULL",
+          "isAllDay": "BOOLEAN DEFAULT false",
+          "recurrence": "JSONB",
+          "entityType": "ENUM('COMPANY', 'BRAND', 'BRANCH', 'PERSON')",
+          "entityId": "UUID",
+          "participants": "JSONB",
+          "location": "VARCHAR(255)",
+          "notes": "TEXT",
+          "attachments": "JSONB",
+          "priority": "ENUM('LOW', 'MEDIUM', 'HIGH', 'URGENT') DEFAULT 'MEDIUM'",
+          "status": "ENUM('PLANNED', 'IN_PROGRESS', 'COMPLETED', 'CANCELLED') DEFAULT 'PLANNED'",
+          "reminderSettings": "JSONB",
+          "color": "VARCHAR(7)",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["startDate", "endDate", "type", "status", "entityType", "entityId"]
+      },
+      "presentations": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(255) NOT NULL",
+          "entityType": "ENUM('COMPANY', 'BRAND', 'BRANCH', 'PERSON')",
+          "entityId": "UUID",
+          "templateId": "UUID",
+          "slides": "JSONB NOT NULL",
+          "theme": "JSONB",
+          "status": "ENUM('ACTIVE', 'DRAFT', 'ARCHIVED') DEFAULT 'DRAFT'",
+          "shareToken": "VARCHAR(100) UNIQUE",
+          "views": "INTEGER DEFAULT 0",
+          "lastViewedAt": "TIMESTAMP",
+          "version": "INTEGER DEFAULT 1",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["entityType", "entityId", "status", "shareToken"]
+      },
+      "presentation_templates": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(255) NOT NULL",
+          "type": "VARCHAR(100)",
+          "slideTemplates": "JSONB NOT NULL",
+          "defaultTheme": "JSONB",
+          "isActive": "BOOLEAN DEFAULT true",
+          "usageCount": "INTEGER DEFAULT 0",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()"
+        }
+      },
+      "activities": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "entityType": "VARCHAR(50) NOT NULL",
+          "entityId": "UUID NOT NULL",
+          "action": "VARCHAR(100) NOT NULL",
+          "description": "TEXT",
+          "metadata": "JSONB",
+          "performedBy": "UUID REFERENCES users(id)",
+          "ipAddress": "VARCHAR(45)",
+          "userAgent": "TEXT",
+          "createdAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["entityType", "entityId", "action", "performedBy", "createdAt"]
+      },
+      "notifications": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "userId": "UUID REFERENCES users(id) ON DELETE CASCADE",
+          "type": "VARCHAR(50) NOT NULL",
+          "title": "VARCHAR(255) NOT NULL",
+          "message": "TEXT",
+          "data": "JSONB",
+          "isRead": "BOOLEAN DEFAULT false",
+          "readAt": "TIMESTAMP",
+          "createdAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["userId", "isRead", "createdAt"]
+      },
+      "settings": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "category": "VARCHAR(50) NOT NULL",
+          "key": "VARCHAR(100) NOT NULL",
+          "value": "JSONB NOT NULL",
+          "isPublic": "BOOLEAN DEFAULT false",
+          "updatedBy": "UUID REFERENCES users(id)",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["category", "key"],
+        "constraints": ["UNIQUE(category, key)"]
+      },
+      "roles": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "name": "VARCHAR(100) NOT NULL UNIQUE",
+          "displayName": "VARCHAR(100) NOT NULL",
+          "description": "TEXT",
+          "permissions": "JSONB NOT NULL",
+          "isSystem": "BOOLEAN DEFAULT false",
+          "createdBy": "UUID REFERENCES users(id)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()",
+          "updatedAt": "TIMESTAMP DEFAULT NOW()"
+        }
+      },
+      "audit_logs": {
+        "fields": {
+          "id": "UUID PRIMARY KEY",
+          "tableName": "VARCHAR(100) NOT NULL",
+          "recordId": "UUID NOT NULL",
+          "action": "ENUM('CREATE', 'UPDATE', 'DELETE')",
+          "oldData": "JSONB",
+          "newData": "JSONB",
+          "changedFields": "JSONB",
+          "performedBy": "UUID REFERENCES users(id)",
+          "ipAddress": "VARCHAR(45)",
+          "createdAt": "TIMESTAMP DEFAULT NOW()"
+        },
+        "indexes": ["tableName", "recordId", "action", "performedBy", "createdAt"]
+      }
+    }
+  },
+
+  "api_endpoints": {
+    "auth": {
+      "POST /api/auth/register": "Yeni kullanıcı kaydı",
+      "POST /api/auth/login": "Giriş yapma",
+      "POST /api/auth/logout": "Çıkış yapma",
+      "POST /api/auth/refresh": "Token yenileme",
+      "POST /api/auth/forgot-password": "Şifre sıfırlama talebi",
+      "POST /api/auth/reset-password": "Şifre sıfırlama",
+      "GET /api/auth/me": "Mevcut kullanıcı bilgisi"
+    },
+    "companies": {
+      "GET /api/companies": "Şirket listesi (filtreleme, sıralama, pagination)",
+      "GET /api/companies/:id": "Şirket detayı",
+      "POST /api/companies": "Yeni şirket oluştur",
+      "PUT /api/companies/:id": "Şirket güncelle",
+      "DELETE /api/companies/:id": "Şirket sil",
+      "PATCH /api/companies/:id/archive": "Şirket arşivle",
+      "POST /api/companies/:id/duplicate": "Şirket kopyala",
+      "POST /api/companies/bulk-action": "Toplu işlem (sil, arşivle, kopyala)",
+      "GET /api/companies/:id/statistics": "Şirket istatistikleri",
+      "GET /api/companies/:id/brands": "Şirketin markaları",
+      "GET /api/companies/:id/documents": "Şirket belgeleri",
+      "GET /api/companies/:id/reports": "Şirket raporları",
+      "GET /api/companies/:id/activities": "Şirket aktiviteleri",
+      "POST /api/companies/:id/generate-document": "Belge oluştur",
+      "GET /api/companies/export/pdf": "PDF export"
+    },
+    "brands": {
+      "GET /api/brands": "Marka listesi",
+      "GET /api/brands/:id": "Marka detayı",
+      "POST /api/brands": "Yeni marka oluştur",
+      "PUT /api/brands/:id": "Marka güncelle",
+      "DELETE /api/brands/:id": "Marka sil",
+      "PATCH /api/brands/:id/archive": "Marka arşivle",
+      "POST /api/brands/:id/duplicate": "Marka kopyala",
+      "POST /api/brands/bulk-action": "Toplu işlem",
+      "GET /api/brands/:id/statistics": "Marka istatistikleri",
+      "GET /api/brands/:id/branches": "Markanın şubeleri",
+      "GET /api/brands/:id/documents": "Marka belgeleri",
+      "GET /api/brands/:id/reports": "Marka raporları",
+      "POST /api/brands/:id/generate-document": "Belge oluştur",
+      "GET /api/brands/export/pdf": "PDF export"
+    },
+    "branches": {
+      "GET /api/branches": "Şube listesi",
+      "GET /api/branches/:id": "Şube detayı",
+      "POST /api/branches": "Yeni şube oluştur",
+      "PUT /api/branches/:id": "Şube güncelle",
+      "DELETE /api/branches/:id": "Şube sil",
+      "PATCH /api/branches/:id/archive": "Şube arşivle",
+      "POST /api/branches/:id/duplicate": "Şube kopyala",
+      "POST /api/branches/bulk-action": "Toplu işlem",
+      "GET /api/branches/:id/statistics": "Şube istatistikleri",
+      "GET /api/branches/:id/people": "Şubenin kişileri",
+      "GET /api/branches/:id/documents": "Şube belgeleri",
+      "GET /api/branches/:id/reports": "Şube raporları",
+      "POST /api/branches/:id/generate-document": "Belge oluştur",
+      "GET /api/branches/export/pdf": "PDF export"
+    },
+    "people": {
+      "GET /api/people": "Kişi listesi",
+      "GET /api/people/:id": "Kişi detayı",
+      "POST /api/people": "Yeni kişi oluştur",
+      "PUT /api/people/:id": "Kişi güncelle",
+      "DELETE /api/people/:id": "Kişi sil",
+      "PATCH /api/people/:id/archive": "Kişi arşivle",
+      "POST /api/people/:id/duplicate": "Kişi kopyala",
+      "POST /api/people/bulk-action": "Toplu işlem",
+      "GET /api/people/:id/statistics": "Kişi istatistikleri",
+      "GET /api/people/:id/investments": "Kişinin yatırımları",
+      "POST /api/people/:id/investments": "Yatırım ekle",
+      "PUT /api/people/:id/investments/:investmentId": "Yatırım güncelle",
+      "DELETE /api/people/:id/investments/:investmentId": "Yatırım sil",
+      "GET /api/people/:id/documents": "Kişi belgeleri",
+      "GET /api/people/:id/reports": "Kişi raporları",
+      "POST /api/people/:id/generate-document": "Belge oluştur",
+      "GET /api/people/export/pdf": "PDF export"
+    },
+    "documents": {
+      "GET /api/documents": "Belge listesi",
+      "GET /api/documents/:id": "Belge detayı",
+      "POST /api/documents": "Yeni belge oluştur (şablondan veya yükle)",
+      "PUT /api/documents/:id": "Belge güncelle",
+      "DELETE /api/documents/:id": "Belge sil",
+      "PATCH /api/documents/:id/archive": "Belge arşivle",
+      "POST /api/documents/:id/duplicate": "Belge kopyala",
+      "POST /api/documents/bulk-action": "Toplu işlem",
+      "GET /api/documents/:id/preview": "Belge önizleme",
+      "GET /api/documents/:id/download": "Belge indir",
+      "GET /api/documents/:id/versions": "Belge versiyonları",
+      "POST /api/documents/:id/versions": "Yeni versiyon oluştur",
+      "POST /api/documents/generate-from-template": "Şablondan belge oluştur",
+      "POST /api/documents/upload": "Belge yükle",
+      "GET /api/documents/export/pdf": "Toplu PDF export"
+    },
+    "templates": {
+      "GET /api/templates": "Şablon listesi",
+      "GET /api/templates/:id": "Şablon detayı",
+      "POST /api/templates": "Yeni şablon oluştur",
+      "PUT /api/templates/:id": "Şablon güncelle",
+      "DELETE /api/templates/:id": "Şablon sil",
+      "PATCH /api/templates/:id/archive": "Şablon arşivle",
+      "POST /api/templates/:id/duplicate": "Şablon kopyala",
+      "GET /api/templates/:id/preview": "Şablon önizleme",
+      "GET /api/templates/:id/usage": "Şablon kullanım istatistiği",
+      "POST /api/templates/:id/export": "Şablon dışa aktar",
+      "POST /api/templates/import": "Şablon içe aktar"
+    },
+    "reports": {
+      "GET /api/reports": "Rapor listesi",
+      "GET /api/reports/:id": "Rapor detayı",
+      "POST /api/reports": "Yeni rapor oluştur",
+      "PUT /api/reports/:id": "Rapor güncelle",
+      "DELETE /api/reports/:id": "Rapor sil",
+      "PATCH /api/reports/:id/archive": "Rapor arşivle",
+      "POST /api/reports/:id/duplicate": "Rapor kopyala",
+      "GET /api/reports/:id/preview": "Rapor önizleme",
+      "GET /api/reports/:id/download": "Rapor indir (PDF/Excel)",
+      "POST /api/reports/generate": "Rapor oluştur",
+      "GET /api/reports/templates": "Rapor şablonları listesi",
+      "POST /api/reports/templates": "Yeni rapor şablonu",
+      "POST /api/reports/bulk-action": "Toplu işlem"
+    },
+    "calendar": {
+      "GET /api/calendar/events": "Takvim etkinlikleri (tarih aralığı, filtre)",
+      "GET /api/calendar/events/:id": "Etkinlik detayı",
+      "POST /api/calendar/events": "Yeni etkinlik oluştur",
+      "PUT /api/calendar/events/:id": "Etkinlik güncelle",
+      "DELETE /api/calendar/events/:id": "Etkinlik sil",
+      "PATCH /api/calendar/events/:id/status": "Etkinlik durumu güncelle",
+      "GET /api/calendar/events/:id/conflicts": "Çakışma kontrolü",
+      "POST /api/calendar/events/bulk-create": "Toplu etkinlik oluştur",
+      "GET /api/calendar/upcoming": "Yaklaşan etkinlikler",
+      "GET /api/calendar/export": "Takvimi dışa aktar (iCal)"
+    },
+    "presentations": {
+      "GET /api/presentations": "Sunum listesi",
+      "GET /api/presentations/:id": "Sunum detayı",
+      "POST /api/presentations": "Yeni sunum oluştur",
+      "PUT /api/presentations/:id": "Sunum güncelle",
+      "DELETE /api/presentations/:id": "Sunum sil",
+      "PATCH /api/presentations/:id/archive": "Sunum arşivle",
+      "POST /api/presentations/:id/duplicate": "Sunum kopyala",
+      "GET /api/presentations/:id/slides": "Slayt listesi",
+      "POST /api/presentations/:id/slides": "Yeni slayt ekle",
+      "PUT /api/presentations/:id/slides/:slideId": "Slayt güncelle",
+      "DELETE /api/presentations/:id/slides/:slideId": "Slayt sil",
+      "PATCH /api/presentations/:id/slides/reorder": "Slayt sırala",
+      "GET /api/presentations/:id/preview": "Sunum önizleme",
+      "POST /api/presentations/:id/share": "Sunum paylaş (token oluştur)",
+      "GET /api/presentations/share/:token": "Paylaşılan sunum görüntüle",
+      "GET /api/presentations/:id/export": "Sunum dışa aktar (PDF/PPTX)",
+      "POST /api/presentations/:id/track-view": "Görüntülenme kaydet"
+    },
+    "dashboard": {
+      "GET /api/dashboard/statistics": "Dashboard istatistikleri",
+      "GET /api/dashboard/recent-activities": "Son aktiviteler",
+      "GET /api/dashboard/upcoming-events": "Yaklaşan etkinlikler",
+      "GET /api/dashboard/pending-payments": "Bekleyen ödemeler",
+      "GET /api/dashboard/analytics": "Analiz verileri",
+      "GET /api/dashboard/widgets": "Widget verileri"
+    },
+    "settings": {
+      "GET /api/settings": "Tüm ayarlar",
+      "GET /api/settings/:category": "Kategori ayarları",
+      "PUT /api/settings/:category/:key": "Ayar güncelle",
+      "POST /api/settings/backup": "Yedek oluştur",
+      "POST /api/settings/restore": "Yedek geri yükle",
+      "GET /api/settings/roles": "Rol listesi",
+      "POST /api/settings/roles": "Yeni rol oluştur",
+      "PUT /api/settings/roles/:id": "Rol güncelle",
+      "DELETE /api/settings/roles/:id": "Rol sil",
+      "GET /api/settings/users": "Kullanıcı listesi",
+      "POST /api/settings/users": "Yeni kullanıcı oluştur",
+      "PUT /api/settings/users/:id": "Kullanıcı güncelle",
+      "DELETE /api/settings/users/:id": "Kullanıcı sil",
+      "PATCH /api/settings/users/:id/status": "Kullanıcı durumu değiştir"
+    },
+    "search": {
+      "GET /api/search": "Global arama",
+      "GET /api/search/suggestions": "Arama önerileri",
+      "GET /api/search/history": "Arama geçmişi"
+    },
+    "notifications": {
+      "GET /api/notifications": "Bildirim listesi",
+      "GET /api/notifications/unread-count": "Okunmamış sayısı",
+      "PATCH /api/notifications/:id/read": "Bildirimi okundu işaretle",
+      "PATCH /api/notifications/mark-all-read": "Tümünü okundu işaretle",
+      "DELETE /api/notifications/:id": "Bildirim sil"
+    },
+    "activities": {
+      "GET /api/activities": "Aktivite listesi (entity bazlı)",
+      "GET /api/activities/timeline": "Zaman çizelgesi"
+    },
+    "export": {
+      "POST /api/export/pdf": "PDF oluştur",
+      "POST /api/export/excel": "Excel oluştur",
+      "POST /api/export/csv": "CSV oluştur"
+    },
+    "upload": {
+      "POST /api/upload/image": "Resim yükle",
+      "POST /api/upload/document": "Belge yükle",
+      "POST /api/upload/file": "Genel dosya yükle",
+      "DELETE /api/upload/:fileId": "Dosya sil"
+    }
+  },
+
+  "features": {
+    "1_core_hierarchy": {
+      "description": "Temel hiyerarşik yapı: Şirketler > Markalar > Şubeler > Kişiler",
+      "components": [
+        "Şirket yönetimi (CRUD, tema, belgeler, istatistikler)",
+        "Marka yönetimi (CRUD, tema kalıtımı, ilişkiler)",
+        "Şube yönetimi (CRUD, marka tema kalıtımı)",
+        "Kişi yönetimi (CRUD, roller, yatırımcı özellikleri)"
+      ],
+      "business_rules": [
+        "Şirket silindiğinde tüm bağlı markalar, şubeler ve kişiler ne olacak?",
+        "Tema rengi kalıtımı: Şirket -> Marka -> Şube -> Kişiler (yatırımcı hariç)",
+        "Yatırımcılar birden fazla şube/marka/şirkete bağlı olabilir",
+        "Her seviyede aktif/taslak/arşiv durumu yönetimi",
+        "Toplu işlemler: seçili kayıtları sil, arşivle, kopyala, rapor oluştur"
+      ]
+    },
+    "2_document_management": {
+      "description": "Belge yönetim sistemi",
+      "components": [
+        "Şablon oluşturma ve yönetimi (Rich Text Editor)",
+        "Dinamik placeholder'lar ({{şirket_unvanı}}, {{tarih}} vb.)",
+        "Şablondan belge oluşturma (otomatik doldurma)",
+        "Belge versiyonlama",
+        "Belge kategorileri (sözleşme, senet, dekont, makbuz, fiş, maaş bordrosu)",
+        "PDF önizleme ve düzenleme",
+        "Belge arşivleme",
+        "Entity bazlı belge ilişkilendirme"
+      ],
+      "technical_details": [
+        "Rich Text Editor için TipTap veya Quill.js kullan",
+        "PDF generation için jsPDF veya Puppeteer kullan",
+        "Dosya storage için AWS S3 veya MinIO kullan",
+        "Belge şablonları için JSON yapısı tasarla",
+        "Placeholder'ları regex ile tespit et ve değiştir"
+      ]
+    },
+    "3_reporting_system": {
+      "description": "Raporlama sistemi",
+      "components": [
+        "Rapor şablonları (gelir-gider, P&L, finansal tablolar)",
+        "Hiyerarşi bazlı raporlama (şirket/marka/şube/kişi)",
+        "Özel rapor tasarlayıcı (drag & drop)",
+        "Grafik ve chart entegrasyonu",
+        "Karşılaştırmalı analizler",
+        "Pivot tablolar",
+        "Otomatik periyodik raporlama",
+        "Rapor paylaşımı ve dışa aktarma (PDF/Excel)"
+      ],
+      "report_types": [
+        "Gelir-Gider Raporu",
+        "Kar-Zarar (P&L) Raporu",
+        "Bilanço Raporu",
+        "Nakit Akış Raporu",
+        "Yatırımcı Raporu",
+        "Performans Raporu",
+        "Özel Raporlar"
+      ]
+    },
+    "4_calendar_system": {
+      "description": "Detaylı takvim sistemi",
+      "components": [
+        "Ay/hafta/gün/gündem görünümleri",
+        "Drag & drop etkinlik oluşturma/düzenleme",
+        "Tekrarlayan etkinlikler",
+        "Çakışma kontrolü",
+        "Entity bazlı etkinlik ilişkilendirme",
+        "Hatırlatıcılar",
+        "Katılımcı yönetimi",
+        "Renkli kategorizasyon",
+        "Toplu etkinlik oluşturma",
+        "Dışa aktarma (iCal, PDF)"
+      ],
+      "event_types": [
+        "Toplantı",
+        "Arama",
+        "Ödeme",
+        "Ziyaret",
+        "Hatırlatıcı",
+        "Özel"
+      ],
+      "technical_details": [
+        "FullCalendar veya react-big-calendar kullan",
+        "Recurrence için RRule kütüphanesi kullan",
+        "Çakışma algoritması implement et",
+        "WebSocket ile real-time güncelleme (opsiyonel)"
+      ]
+    },
+    "5_presentation_builder": {
+      "description": "Sunum/Pitch Deck oluşturma aracı",
+      "components": [
+        "Drag & drop slayt editörü",
+        "Hazır slayt şablonları",
+        "Dinamik veri bağlama (entity bilgileri, grafikler)",
+        "Medya yönetimi (resim, logo, video)",
+        "Grafik/tablo ekleme",
+        "Tema ve renk ayarları",
+        "Slayt sıralama",
+        "Animasyon ve geçişler",
+        "Sunum notları",
+        "Paylaşım linkleri",
+        "Görüntülenme takibi",
+        "Dışa aktarma (PDF, PPTX)"
+      ],
+      "presentation_templates": [
+        "Yatırımcı Sunumu",
+        "Ürün Tanıtımı",
+        "Şirket Profili",
+        "Finansal Rapor Sunumu",
+        "Proje Sunumu"
+      ]
+    },
+    "6_investment_tracking": {
+      "description": "Yatırımcı ve yatırım takibi",
+      "components": [
+        "Yatırımcı kaydı (kişi rolü)",
+        "Yatırım yeri seçimi (şirket/marka/şube)",
+        "Hisse oranı takibi",
+        "Yatırım tutarı ve tarihi",
+        "Amortisman hesaplama",
+        "Aylık kazanç hesaplama: Yatırım Tutarı / Amortisman",
+        "Birden fazla yatırım yapabilme",
+        "Yatırım raporları",
+        "Yatırımcı dashboard'u"
+      ],
+      "calculations": [
+        "Aylık Kazanç = Yatırım Tutarı / Amortisman Ayı",
+        "Toplam Kazanç = Aylık Kazanç × Geçen Ay Sayısı",
+        "Kalan Amortisman = Toplam Amortisman - Geçen Ay",
+        "ROI Hesaplamaları"
+      ]
+    },
+    "7_user_management": {
+      "description": "Kullanıcı ve yetki yönetimi",
+      "components": [
+        "Kullanıcı CRUD",
+        "Rol tanımlama (Admin, Manager, User, Guest + custom)",
+        "Yetki matrisi (page-level permissions)",
+        "İki faktörlü kimlik doğrulama",
+        "Şifre politikaları",
+        "Oturum yönetimi",
+        "Kullanıcı aktivite logları",
+        "IP kısıtlamaları"
+      ],
+      "default_roles": [
+        "Super Admin (tüm yetkiler)",
+        "Admin (sistem yönetimi)",
+        "Manager (veri yönetimi)",
+        "User (okuma/yazma)",
+        "Guest (sadece okuma)"
+      ]
+    },
+    "8_dashboard": {
+      "description": "Dashboard ve analizler",
+      "components": [
+        "Özet istatistikler (KPI'lar)",
+        "Son aktiviteler",
+        "Yaklaşan etkinlikler",
+        "Bekleyen ödemeler/hatırlatıcılar",
+        "Grafikler ve chartlar",
+        "Kişiselleştirilebilir widget'lar",
+        "Hızlı erişim menüsü",
+        "Favori kayıtlar"
+      ],
+      "widgets": [
+        "Toplam Şirket/Marka/Şube/Kişi Sayıları",
+        "Aylık Gelir/Gider",
+        "Yatırımcı Özeti",
+        "Yaklaşan Ödemeler",
+        "Son Belgeler",
+        "Takvim Özeti",
+        "Aktivite Akışı"
+      ]
+    },
+    "9_search_and_filters": {
+      "description": "Arama ve filtreleme sistemi",
+      "components": [
+        "Global arama (tüm entitylerde)",
+        "Gelişmiş filtreleme (multi-criteria)",
+        "Kayıtlı filtreler",
+        "Arama geçmişi",
+        "Arama önerileri",
+        "Fuzzy search",
+        "Full-text search"
+      ],
+      "filter_options": [
+        "Durum (aktif/taslak/arşiv)",
+        "Tarih aralığı",
+        "Tema rengi",
+        "Bağlı entity",
+        "Oluşturan kullanıcı",
+        "Kategoriler"
+      ]
+    },
+    "10_bulk_operations": {
+      "description": "Toplu işlemler",
+      "operations": [
+        "Toplu silme",
+        "Toplu arşivleme",
+        "Toplu kopyalama",
+        "Toplu rapor oluşturma",
+        "Toplu durum değiştirme",
+        "Toplu düzenleme",
+        "Toplu etiketleme",
+        "Toplu export (PDF/Excel)"
+      ],
+      "technical_details": [
+        "Checkbox selection sistemi",
+        "Select all fonksiyonu",
+        "İşlem onay modal'ı",
+        "Progress bar ile işlem takibi",
+        "Batch processing (chunk'lara böl)",
+        "Error handling ve geri bildirim"
+      ]
+    },
+    "11_activity_tracking": {
+      "description": "Aktivite takibi ve audit logs",
+      "components": [
+        "Her entity için timeline görünümü",
+        "Yapılan değişikliklerin geçmişi",
+        "Kim-ne-ne zaman yaptı logları",
+        "Yorumlar ve notlar",
+        "@mention sistemi",
+        "Değişiklik karşılaştırma",
+        "Geri alma/yineleme (undo/redo)",
+        "Export audit logs"
+      ]
+    },
+    "12_notifications": {
+      "description": "Bildirim sistemi",
+      "types": [
+        "Sistem içi bildirimler",
+        "E-posta bildirimleri",
+        "SMS bildirimleri (opsiyonel)",
+        "Push notifications (opsiyonel)"
+      ],
+      "triggers": [
+        "Ödeme tarihi yaklaşıyor",
+        "Yeni belge oluşturuldu",
+        "Rapor hazır",
+        "Toplantı hatırlatıcısı",
+        "Yatırım kazancı",
+        "Kullanıcı aktivitesi",
+        "Sistem güncellemeleri"
+      ],
+      "settings": [
+        "Bildirim tercihleri (hangi kanallardan)",
+        "Hangi olaylar için bildirim",
+        "Bildirim zamanlaması",
+        "Sessiz saatler"
+      ]
+    },
+    "13_export_import": {
+      "description": "Veri içe/dışa aktarma",
+      "export_formats": [
+        "PDF (belge, rapor, liste)",
+        "Excel (liste, raporlar)",
+        "CSV (liste)",
+        "JSON (veri yedekleme)",
+        "iCal (takvim)",
+        "PPTX (sunumlar)"
+      ],
+      "import_formats": [
+        "Excel (toplu veri içe aktarma)",
+        "CSV (toplu veri içe aktarma)",
+        "JSON (veri geri yükleme)"
+      ],
+      "features": [
+        "Sütun mapping (hangi sütun hangi alana)",
+        "Veri validasyonu",
+        "Duplicate kontrolü",
+        "Preview before import",
+        "Error handling ve raporlama",
+        "Toplu işlem ile import"
+      ]
+    },
+    "14_versioning": {
+      "description": "Versiyon kontrolü",
+      "components": [
+        "Belge versiyonlama",
+        "Şablon versiyonlama",
+        "Rapor versiyonlama",
+        "Sunum versiyonlama",
+        "Versiyon karşılaştırma",
+        "Versiyon geri yükleme",
+        "Versiyon notları",
+        "Versiyon geçmişi timeline"
+      ]
+    },
+    "15_theme_management": {
+      "description": "Tema ve renk yönetimi",
+      "rules": [
+        "Şirket -> Marka -> Şube -> Kişiler (yatırımcı hariç) renk kalıtımı",
+        "Her seviyede tema rengi seçimi/düzenleme",
+        "Alt seviyeler üst seviyeden renk alır",
+        "Üst seviye renk değiştiğinde alt seviyeler de değişir",
+        "Yatırımcılar birden fazla yere bağlı olduğu için renk kalıtımı almaz",
+        "Tema önizleme",
+        "Sistem geneli varsayılan tema"
+      ],
+      "technical_implementation": [
+        "CSS variables kullanarak dinamik tema",
+        "Tailwind CSS ile renk palette'leri",
+        "Entity bazlı theme override",
+        "Dark/Light mode desteği (opsiyonel)"
+      ]
+    },
+    "16_security": {
+      "description": "Güvenlik özellikleri",
+      "features": [
+        "JWT authentication",
+        "Refresh token mekanizması",
+        "Role-based access control (RBAC)",
+        "Field-level permissions",
+        "Two-factor authentication (2FA)",
+        "Password hashing (bcrypt)",
+        "CSRF protection",
+        "XSS protection",
+        "SQL injection prevention (ORM kullanımı)",
+        "Rate limiting",
+        "IP whitelisting/blacklisting",
+        "Session timeout",
+        "Audit logging",
+        "Data encryption at rest",
+        "HTTPS enforcement"
+      ]
+    },
+    "17_integrations": {
+      "description": "Entegrasyonlar",
+      "external_services": [
+        "E-posta (SMTP, SendGrid, AWS SES)",
+        "SMS (Twilio, Vonage)",
+        "Cloud storage (AWS S3, Google Cloud Storage)",
+        "Payment gateways (opsiyonel)",
+        "Muhasebe yazılımları (Logo, Netsis, SAP)",
+        "E-Fatura/E-Arşiv sistemi",
+        "E-İmza entegrasyonu",
+        "Banka API'leri (hesap hareketleri)",
+        "Google Calendar/Outlook Calendar",
+        "Webhooks"
+      ],
+      "api": [
+        "RESTful API",
+        "API authentication (API keys)",
+        "Rate limiting",
+        "API documentation (Swagger/OpenAPI)",
+        "Versioned API endpoints",
+        "Webhook system"
+      ]
+    },
+    "18_performance": {
+      "description": "Performans optimizasyonları",
+      "frontend": [
+        "Code splitting",
+        "Lazy loading",
+        "Image optimization",
+        "Caching strategies",
+        "Memoization",
+        "Virtual scrolling (büyük listeler için)",
+        "Debouncing/throttling",
+        "Service worker (PWA - opsiyonel)"
+      ],
+      "backend": [
+        "Database indexing",
+        "Query optimization",
+        "Caching (Redis)",
+        "Connection pooling",
+        "Pagination",
+        "Compression",
+        "CDN kullanımı",
+        "Load balancing (production için)"
+      ]
+    },
+    "19_responsive_design": {
+      "description": "Responsive ve mobil uyumluluk",
+      "breakpoints": [
+        "Mobile: 320px - 640px",
+        "Tablet: 641px - 1024px",
+        "Desktop: 1025px - 1920px",
+        "Large Desktop: 1921px+"
+      ],
+      "features": [
+        "Mobile-first approach",
+        "Touch-friendly UI",
+        "Responsive tables (scroll/stack)",
+        "Hamburger menu (mobile)",
+        "Swipe gestures",
+        "Adaptive layouts"
+      ]
+    },
+    "20_error_handling": {
+      "description": "Hata yönetimi",
+      "components": [
+        "Global error boundary",
+        "API error handling",
+        "Validation errors",
+        "User-friendly error messages",
+        "Error logging (Sentry)",
+        "Retry mechanisms",
+        "Fallback UI",
+        "404/500 error pages"
+      ]
+    }
+  },
+
+  "ui_ux_specifications": {
+    "navbar": {
+      "position": "top-fixed",
+      "height": "64px",
+      "components": [
+        "Logo/Brand (sol)",
+        "Global search bar (orta)",
+        "Notifications icon + badge (sağ)",
+        "User profile dropdown (sağ)",
+        "Theme toggle (optional)",
+        "Language selector (optional)"
+      ],
+      "styling": "Gölgeli, sabit, z-index yüksek"
+    },
+    "sidebar": {
+      "position": "left-fixed",
+      "width": "260px collapsed/64px expanded",
+      "menu_items": [
+        "Dashboard",
+        "Şirketler",
+        "Markalar",
+        "Şubeler",
+        "Kişiler",
+        "Raporlar",
+        "Belgeler",
+        "Şablonlar",
+        "Takvim",
+        "Sunumlar",
+        "Ayarlar"
+      ],
+      "features": [
+        "Collapsible/expandable",
+        "Active state highlighting",
+        "Icons + text",
+        "Nested menu support (optional)",
+        "Hover effects"
+      ]
+    },
+    "main_content": {
+      "layout": "margin-left: 260px, margin-top: 64px, padding: 24px",
+      "components": [
+        "Page header (başlık, breadcrumb, action buttons)",
+        "Content area",
+        "Loading states",
+        "Empty states"
+      ]
+    },
+    "table_component": {
+      "features": [
+        "Sortable columns (asc/desc)",
+        "Filterable columns",
+        "Search",
+        "Pagination",
+        "Rows per page selector",
+        "Checkbox selection (leftmost)",
+        "Action buttons (rightmost)",
+        "Hover effect on rows",
+        "Striped rows (optional)",
+        "Responsive (horizontal scroll on mobile)",
+        "Loading skeleton",
+        "Empty state"
+      ],
+      "columns": "Dinamik, her entity için özelleştirilmiş"
+    },
+    "form_components": {
+      "input": {
+        "types": ["text", "email", "number", "tel", "url", "password"],
+        "features": [
+          "Label",
+          "Placeholder",
+          "Required indicator (*)",
+          "Error message display",
+          "Success state",
+          "Disabled state",
+          "Helper text"
+        ]
+      },
+      "select": {
+        "types": ["single", "multi"],
+        "features": [
+          "Searchable",
+          "Clear button",
+          "Loading state",
+          "Custom option rendering",
+          "Grouped options",
+          "Async loading"
+        ]
+      },
+      "date_picker": {
+        "features": [
+          "Calendar popup",
+          "Range selection",
+          "Min/max dates",
+          "Disabled dates",
+          "Multiple date formats",
+          "Today button",
+          "Clear button"
+        ]
+      },
+      "file_upload": {
+        "features": [
+          "Drag & drop area",
+          "File type restrictions",
+          "Size limit",
+          "Preview (image/pdf)",
+          "Multiple files",
+          "Progress bar",
+          "Remove uploaded file"
+        ]
+      },
+      "rich_text_editor": {
+        "toolbar": [
+          "Bold, italic, underline",
+          "Headings",
+          "Lists (ordered/unordered)",
+          "Links",
+          "Images",
+          "Tables",
+          "Text alignment",
+          "Text color/background",
+          "Font family/size",
+          "Undo/redo"
+        ],
+        "features": [
+          "Placeholder support",
+          "Character counter",
+          "Word counter",
+          "Full screen mode"
+        ]
+      }
+    },
+    "modal_dialog": {
+      "sizes": ["sm: 400px", "md: 600px", "lg: 800px", "xl: 1200px", "full"],
+      "components": [
+        "Header (başlık + close button)",
+        "Body (scrollable)",
+        "Footer (action buttons)"
+      ],
+      "features": [
+        "Backdrop click to close (optional)",
+        "ESC key to close",
+        "Animation (fade + scale)",
+        "Scrollable body",
+        "Stacked modals support"
+      ]
+    },
+    "buttons": {
+      "variants": [
+        "Primary (filled)",
+        "Secondary (outlined)",
+        "Tertiary (text only)",
+        "Danger (red)",
+        "Success (green)"
+      ],
+      "sizes": ["sm", "md", "lg"],
+      "states": ["default", "hover", "active", "disabled", "loading"],
+      "features": [
+        "Icon support (left/right)",
+        "Loading spinner",
+        "Full width option"
+      ]
+    },
+    "cards": {
+      "components": [
+        "Header (optional)",
+        "Body",
+        "Footer (optional)"
+      ],
+      "variants": [
+        "Default",
+        "Outlined",
+        "Elevated (shadow)"
+      ],
+      "usage": "Dashboard widgets, detail pages, list items"
+    },
+    "badges": {
+      "variants": [
+        "Status (success/warning/danger/info)",
+        "Count",
+        "Dot"
+      ],
+      "usage": "Status indicators, notification count, labels"
+    },
+    "tooltips": {
+      "positions": ["top", "bottom", "left", "right"],
+      "triggers": ["hover", "click", "focus"],
+      "features": "Arrow, animation, max-width"
+    },
+    "loading_states": {
+      "types": [
+        "Spinner (centered, overlay)",
+        "Skeleton screens (tables, cards)",
+        "Progress bar (linear)",
+        "Button loading state"
+      ]
+    },
+    "empty_states": {
+      "components": [
+        "Icon/illustration",
+        "Title",
+        "Description",
+        "Action button"
+      ],
+      "usage": "Boş listeler, arama sonucu yok, hata durumları"
+    },
+    "color_palette": {
+      "primary": "#3B82F6 (blue)",
+      "secondary": "#6B7280 (gray)",
+      "success": "#10B981 (green)",
+      "warning": "#F59E0B (yellow)",
+      "danger": "#EF4444 (red)",
+      "info": "#06B6D4 (cyan)",
+      "light": "#F9FAFB",
+      "dark": "#1F2937",
+      "white": "#FFFFFF",
+      "black": "#000000"
+    },
+    "typography": {
+      "font_family": "Inter, system-ui, sans-serif",
+      "headings": [
+        "h1: 2.25rem (36px), font-weight: 700",
+        "h2: 1.875rem (30px), font-weight: 600",
+        "h3: 1.5rem (24px), font-weight: 600",
+        "h4: 1.25rem (20px), font-weight: 600",
+        "h5: 1.125rem (18px), font-weight: 500",
+        "h6: 1rem (16px), font-weight: 500"
+      ],
+      "body": [
+        "base: 1rem (16px)",
+        "sm: 0.875rem (14px)",
+        "xs: 0.75rem (12px)"
+      ]
+    },
+    "spacing": {
+      "system": "4px base unit (Tailwind default)",
+      "common": ["4px", "8px", "12px", "16px", "24px", "32px", "48px", "64px"]
+    },
+    "shadows": {
+      "sm": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+      "md": "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+      "lg": "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+      "xl": "0 20px 25px -5px rgb(0 0 0 / 0.1)"
+    },
+    "border_radius": {
+      "sm": "0.25rem (4px)",
+      "md": "0.375rem (6px)",
+      "lg": "0.5rem (8px)",
+      "xl": "0.75rem (12px)",
+      "full": "9999px"
+    }
+  },
+
+  "page_specifications": {
+    "login_page": {
+      "layout": "Centered card on gradient background",
+      "components": [
+        "Logo",
+        "Title 'Giriş Yap'",
+        "Email input",
+        "Password input (show/hide toggle)",
+        "Remember me checkbox",
+        "Login button",
+        "Forgot password link",
+        "Error message display"
+      ],
+      "validations": [
+        "Email format kontrolü",
+        "Boş alan kontrolü",
+        "Rate limiting (5 başarısız deneme sonrası geçici blok)"
+      ]
+    },
+    "dashboard_page": {
+      "layout": "Grid layout (responsive)",
+      "widgets": [
+        {
+          "name": "Statistics Cards",
+          "metrics": [
+            "Toplam Şirket Sayısı",
+            "Toplam Marka Sayısı",
+            "Toplam Şube Sayısı",
+            "Toplam Kişi Sayısı",
+            "Aktif Yatırımcı Sayısı",
+            "Toplam Yatırım Tutarı"
+          ],
+          "features": "Icon, değer, değişim yüzdesi (artış/azalış)"
+        },
+        {
+          "name": "Recent Activities",
+          "display": "Liste formatı, en son 10 aktivite",
+          "features": "Icon, açıklama, zaman damgası, kullanıcı"
+        },
+        {
+          "name": "Upcoming Events",
+          "display": "Mini takvim + liste",
+          "features": "Bugünün ve yaklaşan 7 günün etkinlikleri"
+        },
+        {
+          "name": "Pending Payments",
+          "display": "Tablo formatı",
+          "features": "Ödeme adı, tutar, tarih, durum, aksiyon butonu"
+        },
+        {
+          "name": "Charts",
+          "types": [
+            "Aylık gelir/gider trend (line chart)",
+            "Şirket/Marka/Şube dağılımı (pie chart)",
+            "Yatırımcı portföyü (bar chart)"
+          ]
+        }
+      ]
+    },
+    "companies_list_page": {
+      "header": {
+        "title": "Şirketler",
+        "breadcrumb": "Ana Sayfa > Şirketler",
+        "actions": [
+          "Yazdır butonu (PDF export)",
+          "Şirket Ekle butonu"
+        ]
+      },
+      "filters": {
+        "search": "Şirket adı, vergi no, şehir",
+        "status": "Tümü, Aktif, Taslak, Arşiv",
+        "date_range": "Oluşturulma tarihi",
+        "theme_color": "Tema rengi filtresi",
+        "created_by": "Oluşturan kullanıcı"
+      },
+      "table": {
+        "columns": [
+          "Checkbox (toplu seçim)",
+          "Logo (thumbnail)",
+          "Şirket Adı",
+          "Vergi No",
+          "Şehir",
+          "Marka Sayısı",
+          "Durum (badge)",
+          "Oluşturulma Tarihi",
+          "Aksiyonlar (görüntüle, düzenle, sil)"
+        ],
+        "bulk_actions": [
+          "Seçilenleri Sil",
+          "Seçilenleri Arşivle",
+          "Seçilenleri Kopyala",
+          "Rapor Oluştur"
+        ]
+      },
+      "pagination": "Alt kısımda, sayfa başına 10/25/50/100 seçeneği"
+    },
+    "company_detail_page": {
+      "layout": "Tab-based layout",
+      "header": {
+        "logo": "Sol tarafta",
+        "info": "Şirket adı, vergi no, durum badge",
+        "actions": [
+          "Düzenle",
+          "Sil",
+          "Arşivle",
+          "Kopyala",
+          "Rapor Oluştur"
+        ]
+      },
+      "tabs": [
+        {
+          "name": "Genel Bilgiler",
+          "content": [
+            "Tüm şirket bilgileri (read-only veya editable mode)",
+            "Logo",
+            "İletişim bilgileri",
+            "Adres",
+            "Telefon/Mail/IBAN listesi",
+            "Tema rengi"
+          ]
+        },
+        {
+          "name": "Markalar",
+          "content": "Bağlı markaların listesi, yeni marka ekleme"
+        },
+        {
+          "name": "Belgeler",
+          "content": "Şirkete ait belgelerin listesi, yeni belge ekleme/oluşturma"
+        },
+        {
+          "name": "Raporlar",
+          "content": "Şirkete ait raporların listesi, yeni rapor oluşturma"
+        },
+        {
+          "name": "İstatistikler",
+          "content": [
+            "Marka/Şube/Kişi sayıları",
+            "Finansal özetler",
+            "Grafikler ve chartlar",
+            "Trend analizleri"
+          ]
+        },
+        {
+          "name": "Aktiviteler",
+          "content": "Timeline view, tüm değişiklikler ve aksiyonlar"
+        }
+      ]
+    },
+    "company_create_edit_modal": {
+      "size": "xl (1200px)",
+      "sections": [
+        {
+          "title": "Temel Bilgiler",
+          "fields": [
+            "Logo yükleme (drag & drop veya click)",
+            "Şirket Unvanı (required)",
+            "Vergi No"
+          ]
+        },
+        {
+          "title": "İletişim Bilgileri",
+          "fields": [
+            "Ülke (dropdown, searchable)",
+            "Şehir (dropdown, ülkeye göre dinamik)",
+            "Semt (dropdown, şehire göre dinamik)",
+            "Adres (textarea)",
+            "Telefon Numaraları (+ butonu ile birden fazla eklenebilir)",
+            "Mail Adresleri (+ butonu ile birden fazla eklenebilir)",
+            "IBAN"
+          ]
+        },
+        {
+          "title": "Belgeler",
+          "fields": [
+            "Vergi Levhası yükleme",
+            "Belge ekleme/oluşturma butonu (şablonlardan seçim)"
+          ]
+        },
+        {
+          "title": "Görünüm",
+          "fields": [
+            "Tema rengi seçici (color picker)"
+          ]
+        }
+      ],
+      "footer": {
+        "buttons": [
+          "İptal",
+          "Taslak Olarak Kaydet",
+          "Kaydet"
+        ]
+      },
+      "validation": [
+        "Şirket adı zorunlu",
+        "Telefon formatı kontrolü",
+        "Email formatı kontrolü",
+        "IBAN formatı kontrolü",
+        "Dosya boyutu limiti (5MB)",
+        "Dosya tipi kontrolü (image, pdf)"
+      ]
+    },
+    "brands_list_page": {
+      "note": "Şirketler sayfası ile aynı yapı, sadece marka spesifik alanlar",
+      "additional_filter": "Bağlı olduğu şirket filtresi",
+      "table_columns_diff": [
+        "Bağlı Şirket sütunu ekle",
+        "Şube Sayısı"
+      ]
+    },
+    "brand_detail_page": {
+      "note": "Company detail ile benzer",
+      "additional_info": "Bağlı olduğu şirket bilgisi (link ile)",
+      "tabs": [
+        "Genel Bilgiler",
+        "Bağlı Şirket",
+        "Şubeler",
+        "Belgeler",
+        "Raporlar",
+        "İstatistikler",
+        "Aktiviteler"
+      ]
+    },
+    "branches_list_page": {
+      "additional_filters": [
+        "Bağlı şirket",
+        "Bağlı marka"
+      ],
+      "table_columns": [
+        "Checkbox",
+        "Logo",
+        "Şube Adı",
+        "SGK No",
+        "Bağlı Şirket",
+        "Bağlı Marka",
+        "Şehir",
+        "Kişi Sayısı",
+        "Durum",
+        "Oluşturulma Tarihi",
+        "Aksiyonlar"
+      ]
+    },
+    "branch_create_edit_modal": {
+      "unique_fields": [
+        "Şube İsmi",
+        "SGK No",
+        "Bağlı Şirket > Marka seçimi (cascading dropdown)",
+        "Tema rengi seçimi YOK (otomatik marka tema rengi)"
+      ],
+      "note": "Marka seçildiğinde tema rengi otomatik atanır ve gösterilir (disabled input)"
+    },
+    "people_list_page": {
+      "filters": [
+        "Rol (Çalışan, Taşeron, Ortak, Yatırımcı, Custom)",
+        "Bağlı şirket/marka/şube",
+        "Durum"
+      ],
+      "table_columns": [
+        "Checkbox",
+        "Fotoğraf",
+        "Ad Soyad",
+        "TC Kimlik",
+        "Rol",
+        "Bağlı Şube",
+        "Telefon",
+        "Email",
+        "Durum",
+        "Aksiyonlar"
+      ]
+    },
+    "person_create_edit_modal": {
+      "sections": [
+        {
+          "title": "Kişisel Bilgiler",
+          "fields": [
+            "Fotoğraf",
+            "İsim",
+            "Soyisim",
+            "TC Kimlik No"
+          ]
+        },
+        {
+          "title": "İletişim",
+          "fields": [
+            "Adres (Ülke/Şehir/Semt + textarea)",
+            "Telefon (multi)",
+            "Email (multi)",
+            "IBAN (multi)"
+          ]
+        },
+        {
+          "title": "Bağlantılar",
+          "fields": [
+            "Şirket > Marka > Şube seçimi (cascading)",
+            "Rol seçimi (dropdown + custom)"
+          ]
+        },
+        {
+          "title": "Yatırımcı Bilgileri",
+          "show_when": "Rol = Yatırımcı",
+          "fields": [
+            "Yatırım Yeri (Şirket/Marka/Şube cascading)",
+            "Yatırım Tarihi (date picker)",
+            "Hisse Oranı (number + % suffix, decimal support)",
+            "Yatırım Tutarı (number + ₺ suffix, formatted)",
+            "Amortisman (dropdown 1-24)",
+            "Aylık Kazanç (calculated, read-only, formatted)"
+          ],
+          "calculation": "Aylık Kazanç = Yatırım Tutarı / Amortisman",
+          "note": "Birden fazla yatırım eklenebilir (+ butonu)"
+        }
+      ]
+    },
+    "person_detail_page": {
+      "tabs": [
+        "Genel Bilgiler",
+        "Bağlı Organizasyonlar (şirket/marka/şube listesi)",
+        "Yatırımlar (yatırımcı ise)",
+        "Belgeler",
+        "Raporlar",
+        "İstatistikler",
+        "Aktiviteler"
+      ]
+    },
+    "documents_list_page": {
+      "filters": [
+        "Belge türü",
+        "Bağlı entity (şirket/marka/şube/kişi)",
+        "Tarih aralığı",
+        "Durum"
+      ],
+      "table_columns": [
+        "Checkbox",
+        "Belge Adı",
+        "Tür",
+        "Bağlı Entity",
+        "Tarih",
+        "Durum",
+        "Oluşturan",
+        "Aksiyonlar (önizle, indir, düzenle, sil)"
+      ]
+    },
+    "document_create_modal": {
+      "options": [
+        {
+          "type": "Şablondan Oluştur",
+          "fields": [
+            "Belge Adı",
+            "Belge Tarihi",
+            "Belge Türü",
+            "İlişkili Entity (şirket/marka/şube/kişi)",
+            "Şablon seçimi (dropdown, türe göre filtrelenir)",
+            "Dinamik alanlar (şablondaki placeholder'lara göre)",
+            "Önizleme (sağda real-time)"
+          ]
+        },
+        {
+          "type": "Belge Yükle",
+          "fields": [
+            "Belge Adı",
+            "Belge Tarihi",
+            "Belge Türü",
+            "İlişkili Entity",
+            "Dosya yükleme (drag & drop, pdf/doc/docx/image)"
+          ]
+        }
+      ]
+    },
+    "document_detail_page": {
+      "components": [
+        "PDF viewer/önizleme (sol taraf, büyük)",
+        "Belge bilgileri (sağ sidebar)",
+        "Versiyon geçmişi",
+        "Yorumlar/notlar",
+        "İlgili belgeler"
+      ],
+      "actions": [
+        "İndir",
+        "Yazdır",
+        "Düzenle",
+        "Yeni Versiyon",
+        "Paylaş",
+        "Sil",
+        "Arşivle"
+      ]
+    },
+    "templates_list_page": {
+      "filters": [
+        "Tür (sözleşme, senet, makbuz, vs)",
+        "Kategori (şirket/marka/şube/kişi/genel)",
+        "Durum (aktif/arşiv)"
+      ],
+      "table_columns": [
+        "Checkbox",
+        "Şablon Adı",
+        "Tür",
+        "Kategori",
+        "Kullanım Sayısı",
+        "Oluşturulma Tarihi",
+        "Aksiyonlar"
+      ]
+    },
+    "template_create_edit_page": {
+      "layout": "Split view (editor sol, preview sağ)",
+      "sections": [
+        {
+          "title": "Şablon Bilgileri",
+          "fields": [
+            "Şablon Adı",
+            "Tür",
+            "Kategori"
+          ]
+        },
+        {
+          "title": "Şablon İçeriği",
+          "editor": {
+            "type": "Rich Text Editor",
+            "toolbar": [
+              "Text formatting",
+              "Headings",
+              "Lists",
+              "Tables",
+              "Images/logos",
+              "Alignment",
+              "Colors"
+            ],
+            "special_features": [
+              "Placeholder ekleme butonu (dropdown menü)",
+              "Available placeholders liste",
+              "Placeholder syntax: {{field_name}}",
+              "Custom CSS/styling options"
+            ]
+          }
+        },
+        {
+          "title": "Placeholder Tanımları",
+          "content": "Kullanılan placeholder'ların açıklamaları ve veri tipleri"
+        }
+      ],
+      "preview": "Sağ tarafta real-time PDF önizleme"
+    },
+    "reports_list_page": {
+      "filters": [
+        "Rapor türü",
+        "İlişkili entity",
+        "Tarih aralığı",
+        "Durum"
+      ],
+      "table_columns": [
+        "Checkbox",
+        "Rapor Adı",
+        "Tür",
+        "İlişkili Entity",
+        "Oluşturulma Tarihi",
+        "Durum",
+        "Aksiyonlar"
+      ]
+    },
+    "report_create_modal": {
+      "steps": [
+        {
+          "step": 1,
+          "title": "Rapor Bilgileri",
+          "fields": [
+            "Rapor Adı",
+            "Rapor Türü (gelir-gider, P&L, bilanço, vs)",
+            "İlişkili Entity"
+          ]
+        },
+        {
+          "step": 2,
+          "title": "Şablon Seçimi",
+          "content": "Mevcut şablonlardan seçim veya özel rapor"
+        },
+        {
+          "step": 3,
+          "title": "Parametreler",
+          "content": "Tarih aralığı, filtreler, gruplamalar"
+        },
+        {
+          "step": 4,
+          "title": "Önizleme",
+          "content": "Rapor önizlemesi, düzenlemeler"
+        }
+      ]
+    },
+    "report_detail_page": {
+      "layout": "PDF viewer + sidebar",
+      "components": [
+        "Rapor görüntüleme (PDF)",
+        "Rapor bilgileri",
+        "Export seçenekleri (PDF/Excel)",
+        "Paylaşım seçenekleri",
+        "Yorumlar"
+      ]
+    },
+    "calendar_page": {
+      "layout": "Full calendar view",
+      "views": [
+        "Month view",
+        "Week view",
+        "Day view",
+        "Agenda view"
+      ],
+      "toolbar": [
+        "View switcher",
+        "Date navigator (prev/today/next)",
+        "Add event button",
+        "Filter button",
+        "Export button"
+      ],
+      "event_interactions": [
+        "Click to view details",
+        "Drag to move",
+        "Resize to change duration",
+        "Double-click to edit",
+        "Right-click context menu"
+      ],
+      "event_colors": "Etkinlik türüne göre renk kodlaması",
+      "filters": [
+        "Etkinlik türü",
+        "İlişkili entity",
+        "Katılımcı",
+        "Durum"
+      ]
+    },
+    "event_create_edit_modal": {
+      "sections": [
+        {
+          "title": "Etkinlik Bilgileri",
+          "fields": [
+            "Başlık",
+            "Etkinlik Türü",
+            "Başlangıç Tarihi & Saati",
+            "Bitiş Tarihi & Saati",
+            "Tüm Gün (checkbox)"
+          ]
+        },
+        {
+          "title": "Tekrar",
+          "fields": [
+            "Tekrarlama (yok, günlük, haftalık, aylık, özel)",
+            "Tekrar sonu (tarih veya tekrar sayısı)"
+          ]
+        },
+        {
+          "title": "İlişkiler",
+          "fields": [
+            "İlişkili Entity",
+            "Katılımcılar (multi-select)",
+            "Konum"
+          ]
+        },
+        {
+          "title": "Detaylar",
+          "fields": [
+            "Açıklama/Notlar (textarea)",
+            "Dosya ekleme",
+            "Öncelik",
+            "Durum",
+            "Renk"
+          ]
+        },
+        {
+          "title": "Hatırlatıcılar",
+          "fields": [
+            "Hatırlatıcı ekle (+ butonu)",
+            "Zaman (15dk, 30dk, 1sa, 1gün önce)",
+            "Metod (sistem içi, email, SMS)"
+          ]
+        }
+      ]
+    },
+    "presentations_list_page": {
+      "view_modes": [
+        "Grid view (thumbnail'larla)",
+        "List view (tablo formatı)"
+      ],
+      "filters": [
+        "İlişkili entity",
+        "Durum",
+        "Oluşturulma tarihi"
+      ],
+      "card_content": [
+        "Thumbnail (ilk slayt)",
+        "Sunum adı",
+        "Slayt sayısı",
+        "Son güncelleme",
+        "Durum badge",
+        "Quick actions (önizle, düzenle, paylaş, sil)"
+      ]
+    },
+    "presentation_editor": {
+      "layout": "3-panel layout",
+      "left_panel": {
+        "title": "Slaytlar",
+        "content": [
+          "Thumbnail list (sortable)",
+          "Add slide button",
+          "Slide templates"
+        ]
+      },
+      "center_panel": {
+        "title": "Canvas/Editor",
+        "content": [
+          "Slayt düzenleme alanı",
+          "Drag & drop elements",
+          "Resize/position elements",
+          "Text editing",
+          "Image/media placement"
+        ]
+      },
+      "right_panel": {
+        "title": "Properties",
+        "content": [
+          "Seçili element özellikleri",
+          "Slide properties",
+          "Theme settings",
+          "Animation settings"
+        ]
+      },
+      "toolbar": [
+        "Text tool",
+        "Shape tool",
+        "Image tool",
+        "Chart tool",
+        "Table tool",
+        "Dynamic data tool",
+        "Undo/Redo",
+        "Zoom controls"
+      ]
+    },
+    "presentation_view_mode": {
+      "controls": [
+        "Previous/Next slide",
+        "Slide counter (1/10)",
+        "Full screen toggle",
+        "Exit button",
+        "Notes panel (optional)"
+      ],
+      "features": [
+        "Keyboard navigation (arrow keys)",
+        "Auto-play mode",
+        "Transition effects"
+      ]
+    },
+    "settings_page": {
+      "layout": "Tabs on left, content on right",
+      "tabs": [
+        {
+          "name": "Genel",
+          "sections": [
+            "Sistem dili",
+            "Tarih formatı",
+            "Saat formatı",
+            "Para birimi",
+            "Zaman dilimi",
+            "Şirket logosu/bilgileri"
+          ]
+        },
+        {
+          "name": "Kullanıcılar",
+          "content": "Kullanıcı tablosu + CRUD"
+        },
+        {
+          "name": "Roller ve Yetkiler",
+          "content": "Rol listesi + yetki matrisi"
+        },
+        {
+          "name": "Bildirimler",
+          "sections": [
+            "E-posta bildirimleri",
+            "Sistem içi bildirimler",
+            "SMS bildirimleri",
+            "Bildirim zamanlaması"
+          ]
+        },
+        {
+          "name": "Entegrasyonlar",
+          "content": "API ayarları, webhook'lar, dış servis bağlantıları"
+        },
+        {
+          "name": "Veri Yönetimi",
+          "actions": [
+            "Yedek al",
+            "Geri yükle",
+            "Veri içe aktar",
+            "Veri dışa aktar",
+            "Veri temizle"
+          ]
+        },
+        {
+          "name": "Güvenlik",
+          "sections": [
+            "İki faktörlü kimlik doğrulama",
+            "Şifre politikaları",
+            "Oturum ayarları",
+            "IP kısıtlamaları"
+          ]
+        },
+        {
+          "name": "Özelleştirme",
+          "sections": [
+            "Tema ayarları",
+            "Logo",
+            "Renkler",
+            "Sidebar öğeleri"
+          ]
+        }
+      ]
+    }
+  },
+
+  "implementation_instructions": {
+    "step_1_project_setup": {
+      "tasks": [
+        "Initialize frontend: npx create-react-app crm-frontend --template typescript",
+        "Initialize backend: npm init -y && install express, typescript, prisma",
+        "Setup Docker and Docker Compose",
+        "Configure PostgreSQL and Redis containers",
+        "Setup Prisma schema",
+        "Generate Prisma client",
+        "Create initial migration"
+      ]
+    },
+    "step_2_authentication": {
+      "tasks": [
+        "Implement JWT authentication",
+        "Create user registration endpoint",
+        "Create login/logout endpoints",
+        "Implement refresh token mechanism",
+        "Create protected route middleware",
+        "Setup RBAC guards",
+        "Implement password reset flow"
+      ]
+    },
+    "step_3_core_entities": {
+      "order": [
+        "1. Users and Roles",
+        "2. Companies",
+        "3. Brands",
+        "4. Branches",
+        "5. People"
+      ],
+      "for_each_entity": [
+        "Create database model",
+        "Create DTOs (Data Transfer Objects)",
+        "Create service layer",
+        "Create controller endpoints",
+        "Create frontend service",
+        "Create list page",
+        "Create detail page",
+        "Create create/edit modal",
+        "Implement CRUD operations",
+        "Implement bulk operations",
+        "Add filtering and sorting",
+        "Add pagination",
+        "Add search",
+        "Implement export to PDF"
+      ]
+    },
+    "step_4_document_system": {
+      "tasks": [
+        "Create template model and endpoints",
+        "Implement rich text editor",
+        "Create placeholder system",
+        "Implement template to document generation",
+        "Setup file storage (S3/MinIO)",
+        "Implement PDF generation",
+        "Create document versioning",
+        "Build document list and detail pages",
+        "Implement document preview"
+      ]
+    },
+    "step_5_reporting": {
+      "tasks": [
+        "Create report templates",
+        "Implement financial calculations",
+        "Build custom report designer",
+        "Integrate charting library",
+        "Create report generation endpoints",
+        "Implement report export (PDF/Excel)",
+        "Build report list and detail pages"
+      ]
+    },
+    "step_6_calendar": {
+      "tasks": [
+        "Integrate calendar library",
+        "Create event model and endpoints",
+        "Implement recurrence logic",
+        "Build event CRUD",
+        "Implement conflict detection",
+        "Create reminder system",
+        "Add calendar views",
+        "Implement drag & drop"
+      ]
+    },
+    "step_7_presentations": {
+      "tasks": [
+        "Create presentation model",
+        "Build slide editor",
+        "Implement drag & drop slide builder",
+        "Create slide templates",
+        "Add dynamic data binding",
+        "Implement presentation viewer",
+        "Create sharing functionality",
+        "Add export to PDF/PPTX"
+      ]
+    },
+    "step_8_dashboard": {
+      "tasks": [
+        "Create dashboard widgets",
+        "Implement statistics calculation",
+        "Build charts and graphs",
+        "Create activity feed",
+        "Implement upcoming events",
+        "Add pending payments",
+        "Make dashboard customizable"
+      ]
+    },
+    "step_9_advanced_features": {
+      "tasks": [
+        "Implement global search",
+        "Add notifications system",
+        "Create activity logging",
+        "Build audit trails",
+        "Implement versioning",
+        "Add export/import functionality",
+        "Create backup/restore features"
+      ]
+    },
+    "step_10_settings": {
+      "tasks": [
+        "Build settings pages",
+        "Implement user management",
+        "Create role management",
+        "Add notification settings",
+        "Implement integration settings",
+        "Add security settings"
+      ]
+    },
+    "step_11_testing": {
+      "tasks": [
+        "Unit tests for services",
+        "Integration tests for APIs",
+        "E2E tests for critical flows",
+        "Performance testing",
+        "Security testing"
+      ]
+    },
+    "step_12_deployment": {
+      "tasks": [
+        "Setup CI/CD pipeline",
+        "Configure production environment",
+        "Setup monitoring and logging",
+        "Configure backups",
+        "Deploy to production"
+      ]
+    }
+  },
+
+  "code_quality_standards": {
+    "general": [
+      "Tüm kodlar TypeScript ile yazılmalı",
+      "ESLint ve Prettier kullanılmalı",
+      "Kod yorumları İngilizce",
+      "Değişken ve fonksiyon isimleri anlamlı ve açıklayıcı",
+      "DRY (Don't Repeat Yourself) prensibi",
+      "SOLID prensipleri",
+      "Clean Code prensipleri"
+    ],
+    "frontend": [
+      "Functional components ve Hooks kullan",
+      "Custom hooks oluştur (reusable logic için)",
+      "PropTypes veya TypeScript interfaces",
+      "CSS-in-JS veya Tailwind CSS",
+      "Component dosya yapısı: Component.tsx, Component.module.css, Component.test.tsx",
+      "Memoization kullan (React.memo, useMemo, useCallback)",
+      "Error boundaries kullan",
+      "Lazy loading ve code splitting"
+    ],
+    "backend": [
+      "Controller-Service-Repository pattern",
+      "Dependency injection",
+      "Error handling middleware",
+      "Request validation (DTOs)",
+      "Logging her endpoint'te",
+      "Try-catch blocks",
+      "Transaction yönetimi",
+      "Connection pooling"
+    ],
+    "database": [
+      "İndeksler düzgün tanımlanmalı",
+      "Foreign key constraints",
+      "Cascade delete/update tanımları",
+      "Migration dosyaları versiyon kontrolünde",
+      "Seed data hazırlanmalı"
+    ]
+  },
+
+  "security_checklist": [
+    "SQL injection: ORM kullanarak korunmalı",
+    "XSS: Input sanitization ve output encoding",
+    "CSRF: Token kullanımı",
+    "Authentication: JWT + refresh token",
+    "Authorization: RBAC implementation",
+    "Password: Bcrypt ile hash",
+    "File upload: Tip ve boyut kontrolü",
+    "Rate limiting: API endpoint'lerinde",
+    "HTTPS: Production'da zorunlu",
+    "Sensitive data: Environment variables",
+    "API keys: Güvenli saklama",
+    "Session: Timeout ayarları",
+    "Audit logs: Tüm kritik işlemler loglanmalı"
+  ],
+
+  "performance_optimization": [
+    "Database queries: N+1 problem çözülmeli",
+    "Caching: Redis kullanımı",
+    "Pagination: Tüm listelerde",
+    "Lazy loading: Büyük component'ler için",
+    "Code splitting: Route-based",
+    "Image optimization: Sıkıştırma ve lazy load",
+    "Debouncing: Search input'larında",
+    "Virtual scrolling: Çok uzun listelerde",
+    "Memoization: Expensive calculations",
+    "CDN: Static asset'ler için"
+  ],
+
+  "testing_strategy": {
+    "unit_tests": [
+      "Tüm service fonksiyonları",
+      "Utility fonksiyonları",
+      "Validation logic",
+      "Calculations (örn: aylık kazanç)"
+    ],
+    "integration_tests": [
+      "API endpoints",
+      "Database operations",
+      "Authentication flow",
+      "File upload/download"
+    ],
+    "e2e_tests": [
+      "User login flow",
+      "Company creation flow",
+      "Document generation flow",
+      "Report creation flow",
+      "Calendar event creation"
+    ]
+  },
+
+  "deployment_configuration": {
+    "environments": [
+      "Development (local)",
+      "Staging (test server)",
+      "Production (live server)"
+    ],
+    "docker": {
+      "containers": [
+        "Frontend (Nginx + React build)",
+        "Backend (Node.js)",
+        "PostgreSQL",
+        "Redis",
+        "MinIO (file storage)"
+      ]
+    },
+    "ci_cd": {
+      "steps": [
+        "Lint check",
+        "Type check",
+        "Unit tests",
+        "Build",
+        "Integration tests",
+        "Deploy to staging",
+        "E2E tests on staging",
+        "Deploy to production (manual approval)"
+      ]
+    },
+    "monitoring": [
+      "Application logs (Winston/Pino)",
+      "Error tracking (Sentry)",
+      "Performance monitoring (Prometheus + Grafana)",
+      "Uptime monitoring",
+      "Database monitoring"
+    ]
+  },
+
+  "documentation_requirements": [
+    "README.md: Proje açıklaması, kurulum, çalıştırma",
+    "API Documentation: Swagger/OpenAPI",
+    "Database Schema: ER diagram",
+    "Architecture Document: Sistem mimarisi",
+    "User Manual: Kullanım kılavuzu",
+    "Developer Guide: Geliştirici kılavuzu",
+    "Deployment Guide: Deployment adımları",
+    "Inline code comments: Karmaşık logic'ler için"
+  ],
+
+  "final_output_structure": {
+    "root": {
+      "files": [
+        "README.md",
+        "docker-compose.yml",
+        ".gitignore",
+        "package.json",
+        "LICENSE"
+      ],
+      "folders": [
+        "frontend/",
+        "backend/",
+        "database/",
+        "docs/",
+        "scripts/"
+      ]
+    },
+    "frontend_structure": {
+      "public": ["index.html", "favicon.ico", "robots.txt"],
+      "src": {
+        "components": "Tüm UI component'leri",
+        "pages": "Sayfa component'leri",
+        "services": "API servisleri",
+        "store": "State management",
+        "hooks": "Custom hooks",
+        "utils": "Utility fonksiyonları",
+        "types": "TypeScript type definitions",
+        "assets": "Resimler, fontlar, vs",
+        "styles": "Global CSS"
+      }
+    },
+    "backend_structure": {
+      "src": {
+        "modules": "Feature modülleri (companies, brands, etc)",
+        "common": "Ortak middleware, guard, decorator'lar",
+        "config": "Konfigurasyon",
+        "database": "Prisma schema, migrations, seeds",
+        "utils": "Utility fonksiyonları"
+      }
+    }
+  },
+
+  "prompt_for_gemini_cli": {
+    "instructions": [
+      "Bu JSON dosyası tüm CRM sistemi için kapsamlı bir blueprint içeriyor.",
+      "Lütfen bu spesifikasyonlara göre tam bir full-stack CRM uygulaması oluştur.",
+      "Tüm sayfa, component, API endpoint, database model'leri detaylı bir şekilde implement et.",
+      "Best practice'leri takip et ve production-ready kod yaz.",
+      "Her adımda açıklayıcı commit message'ları kullan.",
+      "Eksik kalan hiçbir özellik bırakma, tüm detayları implement et.",
+      "Test coverage en az %70 olmalı.",
+      "Kod kalitesi ve güvenlik standartlarına uy.",
+      "Performans optimizasyonlarını uygula.",
+      "Responsive ve kullanıcı dostu UI tasarla.",
+      "Tüm error handling ve validation'ları ekle.",
+      "Documentation'ı detaylı yaz.",
+      "Docker ile kolay deployment sağla."
+    ],
+    "execution_command": "gemini-cli run crm-system-prompt.json",
+    "expected_output": [
+      "Tam çalışan full-stack CRM uygulaması",
+      "Docker Compose ile tek komutta çalıştırılabilir",
+      "Tüm özellikler implement edilmiş",
+      "Production-ready kod kalitesi",
+      "Kapsamlı documentation"
+    ]
+  },
+
+  "additional_business_logic": {
+    "theme_inheritance": {
+      "rules": [
+        "Şirket kendi tema rengini seçer",
+        "Marka, şirketten tema rengini alır (değiştirilebilir)",
+        "Şube, markadan tema rengini alır (değiştirilemez)",
+        "Kişiler, şubeden tema rengini alır (yatırımcılar hariç)",
+        "Yatırımcılar tema rengi almaz (birden fazla yere bağlı olabilir)",
+        "Üst seviye tema değişirse alt seviyeler otomatik güncellenir"
+      ],
+      "implementation": [
+        "Database'de theme_color alanı",
+        "Inheritance logic backend'de",
+        "Frontend'de CSS variables kullanımı",
+        "Real-time güncelleme için WebSocket (opsiyonel)"
+      ]
+    },
+    "investment_calculations": {
+      "formulas": {
+        "monthly_return": "investment_amount / amortization_months",
+        "total_return": "monthly_return * elapsed_months",
+        "remaining_amortization": "total_amortization - elapsed_months",
+        "roi_percentage": "(total_return / investment_amount) * 100"
+      },
+      "features": [
+        "Otomatik hesaplama",
+        "Real-time güncelleme",
+        "Geçmişe yönelik analiz",
+        "Gelecek projeksiyon",
+        "Yatırımcı dashboard'unda özet"
+      ]
+    },
+    "document_generation": {
+      "workflow": [
+        "1. Kullanıcı belge oluştur'a tıklar",
+        "2. Şablon seçimi yapar",
+        "3. Sistem entity bilgilerini çeker",
+        "4. Placeholder'ları otomatik doldurur",
+        "5. Eksik bilgiler için input form gösterir",
+        "6. Kullanıcı eksik bilgileri girer",
+        "7. Önizleme gösterilir",
+        "8. Onaylandığında PDF oluşturulur",
+        "9. Belge entity'e bağlanır ve saklanır"
+      ],
+      "placeholder_types": {
+        "company": [
+          "{{company_name}}",
+          "{{company_tax_number}}",
+          "{{company_address}}",
+          "{{company_phone}}",
+          "{{company_email}}",
+          "{{company_iban}}"
+        ],
+        "brand": [
+          "{{brand_name}}",
+          "{{brand_tax_number}}",
+          "{{brand_address}}",
+          "{{brand_phone}}",
+          "{{brand_email}}",
+          "{{brand_iban}}"
+        ],
+        "branch": [
+          "{{branch_name}}",
+          "{{branch_sgk_number}}",
+          "{{branch_address}}",
+          "{{branch_phone}}",
+          "{{branch_email}}",
+          "{{branch_iban}}"
+        ],
+        "person": [
+          "{{person_first_name}}",
+          "{{person_last_name}}",
+          "{{person_full_name}}",
+          "{{person_national_id}}",
+          "{{person_address}}",
+          "{{person_phone}}",
+          "{{person_email}}",
+          "{{person_iban}}"
+        ],
+        "system": [
+          "{{current_date}}",
+          "{{current_time}}",
+          "{{current_year}}",
+          "{{document_number}}",
+          "{{user_name}}"
+        ]
+      }
+    },
+    "report_generation": {
+      "financial_reports": {
+        "income_statement": {
+          "sections": [
+            "Gelirler (Revenues)",
+            "Satışların Maliyeti (COGS)",
+            "Brüt Kar (Gross Profit)",
+            "İşletme Giderleri (Operating Expenses)",
+            "Faiz ve Vergi Öncesi Kar (EBIT)",
+            "Net Kar (Net Profit)"
+          ],
+          "calculations": [
+            "Gross Profit = Revenue - COGS",
+            "EBIT = Gross Profit - Operating Expenses",
+            "Net Profit = EBIT - Interest - Tax"
+          ]
+        },
+        "balance_sheet": {
+          "sections": [
+            "Aktifler (Assets): Dönen Varlıklar, Duran Varlıklar",
+            "Pasifler (Liabilities): Kısa Vadeli Borçlar, Uzun Vadeli Borçlar",
+            "Özsermaye (Equity)"
+          ],
+          "equation": "Assets = Liabilities + Equity"
+        },
+        "cash_flow": {
+          "sections": [
+            "İşletme Faaliyetlerinden Nakit Akışı",
+            "Yatırım Faaliyetlerinden Nakit Akışı",
+            "Finansman Faaliyetlerinden Nakit Akışı",
+            "Net Nakit Değişimi"
+          ]
+        }
+      },
+      "custom_report_builder": {
+        "features": [
+          "Drag & drop alan seçimi",
+          "Koşullu formatlama",
+          "Gruplandırma",
+          "Toplama/ortalama/min/max hesaplamaları",
+          "Filtreler",
+          "Sıralama",
+          "Grafik ekleme",
+          "Özel formül tanımlama"
+        ]
+      }
+    },
+    "calendar_features": {
+      "recurrence_patterns": [
+        "Günlük (daily)",
+        "Haftalık (weekly) - belirli günler seçilebilir",
+        "Aylık (monthly) - ayın belirli günü veya belirli haftasının belirli günü",
+        "Yıllık (yearly)",
+        "Özel (custom) - RRule syntax"
+      ],
+      "conflict_detection": {
+        "rules": [
+          "Aynı kullanıcı için çakışan etkinlikler",
+          "Aynı katılımcılar için çakışma",
+          "Aynı konum için çakışma (opsiyonel)",
+          "Uyarı göster ama engelleme (soft conflict)",
+          "Etkinlik oluşturmayı engelle (hard conflict)"
+        ]
+      },
+      "reminders": {
+        "channels": ["sistem_içi", "email", "sms", "push_notification"],
+        "timing": ["15dk", "30dk", "1saat", "2saat", "1gün", "1hafta", "özel"],
+        "multiple": "Her etkinliğe birden fazla hatırlatıcı eklenebilir"
+      }
+    },
+    "presentation_features": {
+      "dynamic_data_binding": {
+        "examples": [
+          "Şirket bilgilerini otomatik çek ve yerleştir",
+          "Finansal grafikleri raporlardan çek",
+          "İstatistikleri hesapla ve göster",
+          "Logo ve görselleri otomatik ekle"
+        ],
+        "implementation": "Component-based sistem, her element veri kaynağına bağlanabilir"
+      },
+      "slide_templates": {
+        "types": [
+          "Title slide (başlık, alt başlık, logo)",
+          "Content slide (başlık, içerik, görseller)",
+          "Two column (başlık, 2 sütunlu içerik)",
+          "Image focused (büyük görsel, az metin)",
+          "Chart slide (başlık, grafik, açıklama)",
+          "Table slide (başlık, tablo)",
+          "Quote slide (büyük alıntı)",
+          "Timeline (zaman çizelgesi)",
+          "Contact slide (iletişim bilgileri)"
+        ]
+      },
+      "animations": {
+        "types": [
+          "Fade in/out",
+          "Slide in (top/bottom/left/right)",
+          "Zoom in/out",
+          "Rotate",
+          "Custom"
+        ],
+        "triggers": ["on_click", "with_previous", "after_previous", "timed"]
+      }
+    },
+    "bulk_operations": {
+      "implementation": {
+        "selection": [
+          "Checkbox her satırda",
+          "Header checkbox (select all)",
+          "Shift+click (range selection)",
+          "Ctrl+click (multiple individual selection)"
+        ],
+        "operations": {
+          "delete": {
+            "workflow": [
+              "Kullanıcı kayıtları seçer",
+              "Sil butonuna tıklar",
+              "Onay modal'ı açılır (kaç kayıt silineceği gösterilir)",
+              "Onaylanırsa backend'e istek gönderilir",
+              "Progress bar gösterilir",
+              "Başarılı/başarısız sonuçlar raporlanır",
+              "Liste güncellenir"
+            ],
+            "error_handling": "Bazı kayıtlar silinemezse (bağımlılık) hata listesi gösterilir"
+          },
+          "archive": "Delete ile aynı workflow",
+          "duplicate": {
+            "workflow": [
+              "Seçilen kayıtlar kopyalanır",
+              "İsim sonuna 'Kopya' eklenir",
+              "Benzersiz alanlar (ID, vergi no) yeniden oluşturulur",
+              "İlişkiler korunur (opsiyonel)",
+              "Yeni kayıtlar listelenir"
+            ]
+          },
+          "generate_report": {
+            "workflow": [
+              "Seçilen kayıtlar için rapor tipi seçilir",
+              "Birleştirilmiş rapor veya ayrı raporlar seçeneği",
+              "Rapor parametreleri girilir",
+              "Rapor oluşturulur ve indirilir"
+            ]
+          }
+        }
+      }
+    },
+    "search_implementation": {
+      "global_search": {
+        "scope": [
+          "Şirketler",
+          "Markalar",
+          "Şubeler",
+          "Kişiler",
+          "Belgeler",
+          "Raporlar",
+          "Sunumlar",
+          "Takvim etkinlikleri"
+        ],
+        "features": [
+          "Full-text search",
+          "Fuzzy matching (typo tolerance)",
+          "Highlight matching terms",
+          "Category filtering",
+          "Sort by relevance",
+          "Recent searches",
+          "Search suggestions"
+        ],
+        "ui": [
+          "Global search bar (navbar'da)",
+          "Keyboard shortcut (Ctrl+K veya Cmd+K)",
+          "Quick preview on hover",
+          "Click to navigate to detail"
+        ]
+      },
+      "advanced_filters": {
+        "types": [
+          "Text input (name, address, etc)",
+          "Select (status, type, category)",
+          "Multi-select (tags, categories)",
+          "Date range",
+          "Number range (amount, percentage)",
+          "Boolean (yes/no checkboxes)"
+        ],
+        "features": [
+          "Add/remove filter dynamically",
+          "Saved filter presets",
+          "Share filter URL",
+          "Clear all filters",
+          "Filter count indicator"
+        ]
+      }
+    },
+    "notification_system": {
+      "types": {
+        "info": "Bilgilendirme (mavi)",
+        "success": "Başarılı işlem (yeşil)",
+        "warning": "Uyarı (sarı)",
+        "error": "Hata (kırmızı)"
+      },
+      "delivery": {
+        "in_app": {
+          "display": "Sağ üst köşede toast notification",
+          "persistence": "Notification center'da saklanır",
+          "badge": "Okunmamış sayısı icon'da"
+        },
+        "email": {
+          "templates": "HTML email templates",
+          "frequency": "Anında, özet (günlük/haftalık)",
+          "unsubscribe": "Her email'de unsubscribe linki"
+        },
+        "sms": {
+          "provider": "Twilio veya benzeri",
+          "use_cases": "Kritik hatırlatıcılar, güvenlik bildirimleri"
+        }
+      },
+      "triggers": {
+        "automatic": [
+          "Ödeme tarihi 7 gün önce",
+          "Ödeme tarihi 3 gün önce",
+          "Ödeme tarihi 1 gün önce",
+          "Ödeme tarihi bugün",
+          "Takvim etkinliği hatırlatıcısı",
+          "Rapor hazır",
+          "Belge paylaşıldı",
+          "Yorum eklendi (@mention)",
+          "Kullanıcı rolleri değişti"
+        ],
+        "manual": [
+          "Admin duyurusu",
+          "Sistem bakım bildirimi",
+          "Özellik güncellemesi"
+        ]
+      }
+    },
+    "activity_logging": {
+      "tracked_actions": [
+        "CREATE: Yeni kayıt oluşturuldu",
+        "UPDATE: Kayıt güncellendi (hangi alanlar değişti)",
+        "DELETE: Kayıt silindi",
+        "ARCHIVE: Kayıt arşivlendi",
+        "RESTORE: Kayıt geri getirildi",
+        "DUPLICATE: Kayıt kopyalandı",
+        "SHARE: Kayıt paylaşıldı",
+        "EXPORT: Kayıt dışa aktarıldı",
+        "COMMENT: Yorum eklendi",
+        "FILE_UPLOAD: Dosya yüklendi",
+        "FILE_DOWNLOAD: Dosya indirildi",
+        "LOGIN: Kullanıcı giriş yaptı",
+        "LOGOUT: Kullanıcı çıkış yaptı",
+        "PERMISSION_CHANGE: Yetki değişikliği"
+      ],
+      "storage": {
+        "table": "activities",
+        "fields": [
+          "id",
+          "entity_type",
+          "entity_id",
+          "action",
+          "description",
+          "metadata (JSON)",
+          "performed_by",
+          "ip_address",
+          "user_agent",
+          "created_at"
+        ]
+      },
+      "display": {
+        "timeline": "Entity detail sayfalarında timeline view",
+        "format": "Icon + Kullanıcı + Aksiyon + Zaman damgası",
+        "filtering": "Aksiyon tipine, kullanıcıya, tarihe göre filtre",
+        "export": "Activity log'ları export edilebilir"
+      }
+    },
+    "file_management": {
+      "storage": {
+        "provider": "AWS S3 veya MinIO",
+        "structure": "/{entity_type}/{entity_id}/{file_type}/{filename}",
+        "naming": "UUID + timestamp + original_filename"
+      },
+      "upload": {
+        "methods": ["click_to_select", "drag_and_drop"],
+        "validation": [
+          "File type kontrolü (whitelist)",
+          "File size limiti (5MB default, configurable)",
+          "Virus scan (ClamAV - opsiyonel)",
+          "Image optimization (auto-resize, compress)"
+        ],
+        "progress": "Progress bar ve percentage",
+        "multiple": "Birden fazla dosya aynı anda yüklenebilir"
+      },
+      "preview": {
+        "images": "Lightbox ile tam ekran önizleme",
+        "pdfs": "PDF viewer ile inline önizleme",
+        "documents": "Thumbnails ve metadata gösterimi",
+        "videos": "Video player (opsiyonel)"
+      }
+    },
+    "version_control": {
+      "versioned_entities": [
+        "Documents",
+        "Templates",
+        "Reports",
+        "Presentations"
+      ],
+      "implementation": {
+        "storage": "Her versiyon ayrı kayıt olarak",
+        "metadata": [
+          "version_number",
+          "created_by",
+          "created_at",
+          "change_summary",
+          "file_url (yeni versiyon için)"
+        ],
+        "features": [
+          "Versiyon listesi görüntüleme",
+          "İki versiyon karşılaştırma (diff)",
+          "Eski versiyona geri dönme (restore)",
+          "Versiyon indirme",
+          "Major/minor versiyon tanımlama (opsiyonel)"
+        ]
+      }
+    },
+    "data_validation": {
+      "frontend": {
+        "library": "React Hook Form + Zod",
+        "validations": [
+          "Required fields",
+          "Email format",
+          "Phone format (international)",
+          "URL format",
+          "Number min/max",
+          "String length min/max",
+          "Regex patterns",
+          "Custom validators"
+        ],
+        "ux": [
+          "Inline validation (on blur)",
+          "Real-time validation (on change)",
+          "Error message below field",
+          "Field highlighting (red border)",
+          "Success indicator (green checkmark)"
+        ]
+      },
+      "backend": {
+        "library": "Zod veya Joi",
+        "validations": [
+          "DTO validation",
+          "Business rule validation",
+          "Database constraint checks",
+          "Duplicate checks",
+          "Foreign key validation"
+        ],
+        "error_response": {
+          "format": "Standardized error object",
+          "fields": [
+            "status_code",
+            "message",
+            "errors (array of field errors)",
+            "timestamp"
+          ]
+        }
+      }
+    },
+    "localization": {
+      "implementation": "i18next",
+      "languages": ["tr-TR", "en-US"],
+      "scope": [
+        "UI labels",
+        "Error messages",
+        "Validation messages",
+        "Email templates",
+        "PDF reports (opsiyonel)"
+      ],
+      "features": [
+        "Language switcher (navbar)",
+        "Browser language detection",
+        "Persist user preference",
+        "RTL support (gelecek için)"
+      ]
+    },
+    "backup_restore": {
+      "backup": {
+        "types": [
+          "Full backup (tüm database)",
+          "Incremental backup (değişiklikler)",
+          "File backup (uploaded files)"
+        ],
+        "schedule": [
+          "Otomatik günlük backup (cron job)",
+          "Manual backup (admin trigger)"
+        ],
+        "storage": "S3 veya external storage",
+        "retention": "30 gün (configurable)"
+      },
+      "restore": {
+        "options": [
+          "Full restore (tüm sistem)",
+          "Partial restore (belirli tablo/entity)",
+          "Point-in-time restore"
+        ],
+        "workflow": [
+          "Backup listesi göster",
+          "Backup seç",
+          "Restore onayı",
+          "Progress göster",
+          "Restore tamamlandığında bildir"
+        ],
+        "safety": "Restore öncesi current state backup al"
+      }
+    },
+    "api_rate_limiting": {
+      "implementation": "express-rate-limit",
+      "limits": {
+        "auth_endpoints": "5 request / 15 dakika (login, register)",
+        "general_endpoints": "100 request / 15 dakika",
+        "search_endpoints": "50 request / dakika",
+        "export_endpoints": "10 request / saat"
+      },
+      "response": {
+        "status": 429,
+        "message": "Too many requests",
+        "headers": "X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset"
+      }
+    },
+    "caching_strategy": {
+      "redis_usage": [
+        "Session storage",
+        "API response caching",
+        "Database query results",
+        "Computed statistics",
+        "User preferences"
+      ],
+      "cache_keys": {
+        "pattern": "{entity}:{id}:{version}",
+        "examples": [
+          "company:123:v1",
+          "dashboard:stats:user:456",
+          "report:789:pdf"
+        ]
+      },
+      "ttl": {
+        "static_data": "24 hours",
+        "frequently_changing": "5 minutes",
+        "user_sessions": "7 days",
+        "computed_results": "1 hour"
+      },
+      "invalidation": [
+        "On entity update/delete",
+        "Manual cache clear (admin)",
+        "TTL expiration"
+      ]
+    }
+  },
+
+  "accessibility": {
+    "standards": "WCAG 2.1 Level AA",
+    "features": [
+      "Keyboard navigation (Tab, Enter, Esc)",
+      "ARIA labels",
+      "Screen reader support",
+      "Focus indicators",
+      "Color contrast ratios (4.5:1 minimum)",
+      "Alt text for images",
+      "Form labels",
+      "Error announcements",
+      "Skip navigation links"
+    ]
+  },
+
+  "browser_support": {
+    "minimum_versions": {
+      "Chrome": "90+",
+      "Firefox": "88+",
+      "Safari": "14+",
+      "Edge": "90+"
+    },
+    "fallbacks": [
+      "Polyfills for older browsers",
+      "Graceful degradation",
+      "Feature detection"
+    ]
+  },
+
+  "git_workflow": {
+    "branches": {
+      "main": "Production-ready code",
+      "develop": "Development branch",
+      "feature/*": "Feature branches",
+      "bugfix/*": "Bug fix branches",
+      "hotfix/*": "Production hotfixes"
+    },
+    "commit_convention": "Conventional Commits",
+    "examples": [
+      "feat: Add company creation modal",
+      "fix: Fix theme inheritance bug",
+      "docs: Update API documentation",
+      "refactor: Refactor document service",
+      "test: Add tests for calendar module",
+      "chore: Update dependencies"
+    ],
+    "pr_requirements": [
+      "Description of changes",
+      "Screenshots (for UI changes)",
+      "Tests passing",
+      "Code review approval",
+      "No merge conflicts"
+    ]
+  },
+
+  "environment_variables": {
+    "required": {
+      "NODE_ENV": "development | staging | production",
+      "PORT": "Backend port",
+      "DATABASE_URL": "PostgreSQL connection string",
+      "REDIS_URL": "Redis connection string",
+      "JWT_SECRET": "JWT secret key",
+      "JWT_REFRESH_SECRET": "JWT refresh token secret",
+      "AWS_ACCESS_KEY_ID": "S3 access key",
+      "AWS_SECRET_ACCESS_KEY": "S3 secret key",
+      "AWS_BUCKET_NAME": "S3 bucket name",
+      "AWS_REGION": "S3 region",
+      "SMTP_HOST": "Email server host",
+      "SMTP_PORT": "Email server port",
+      "SMTP_USER": "Email username",
+      "SMTP_PASSWORD": "Email password",
+      "FRONTEND_URL": "Frontend URL (for CORS)"
+    },
+    "optional": {
+      "SENTRY_DSN": "Error tracking",
+      "TWILIO_ACCOUNT_SID": "SMS service",
+      "TWILIO_AUTH_TOKEN": "SMS service",
+      "TWILIO_PHONE_NUMBER": "SMS sender number",
+      "GOOGLE_CLIENT_ID": "Google OAuth",
+      "GOOGLE_CLIENT_SECRET": "Google OAuth"
+    }
+  },
+
+  "sample_data": {
+    "seed_data": {
+      "users": [
+        {
+          "email": "admin@crm.com",
+          "password": "admin123",
+          "role": "ADMIN",
+          "firstName": "Admin",
+          "lastName": "User"
+        },
+        {
+          "email": "manager@crm.com",
+          "password": "manager123",
+          "role": "MANAGER",
+          "firstName": "Manager",
+          "lastName": "User"
+        }
+      ],
+      "companies": [
+        {
+          "companyName": "Tech Corp",
+          "taxNumber": "1234567890",
+          "themeColor": "#3B82F6"
+        },
+        {
+          "companyName": "Food Industries",
+          "taxNumber": "0987654321",
+          "themeColor": "#10B981"
+        }
+      ],
+      "brands": "Her şirket için 2-3 marka",
+      "branches": "Her marka için 2-4 şube",
+      "people": "Her şube için 5-10 kişi",
+      "documents": "Her entity için 2-5 belge",
+      "templates": "10-15 çeşitli belge şablonu",
+      "calendar_events": "30 gün için çeşitli etkinlikler",
+      "presentations": "5-10 örnek sunum"
+    }
+  },
+
+  "troubleshooting": {
+    "common_issues": {
+      "database_connection": {
+        "problem": "Cannot connect to PostgreSQL",
+        "solutions": [
+          "Check DATABASE_URL",
+          "Ensure PostgreSQL is running",
+          "Check firewall rules",
+          "Verify credentials"
+        ]
+      },
+      "file_upload": {
+        "problem": "File upload fails",
+        "solutions": [
+          "Check file size limit",
+          "Verify S3/MinIO credentials",
+          "Check bucket permissions",
+          "Ensure CORS configured"
+        ]
+      },
+      "authentication": {
+        "problem": "JWT token issues",
+        "solutions": [
+          "Check JWT_SECRET",
+          "Verify token expiration",
+          "Check Authorization header format",
+          "Clear browser cache/cookies"
+        ]
+      }
+    }
+  },
+
+  "maintenance": {
+    "regular_tasks": [
+      "Database backup (automated)",
+      "Log rotation",
+      "Cache clearing",
+      "Dead link checking",
+      "Security updates",
+      "Dependency updates",
+      "Performance monitoring review",
+      "User feedback review"
+    ],
+    "quarterly_tasks": [
+      "Security audit",
+      "Load testing",
+      "Database optimization",
+      "Code refactoring review",
+      "Documentation update"
+    ]
+  },
+
+  "scalability_considerations": {
+    "database": [
+      "Connection pooling",
+      "Read replicas",
+      "Sharding (for very large scale)",
+      "Archiving old data"
+    ],
+    "application": [
+      "Horizontal scaling (multiple instances)",
+      "Load balancer",
+      "Microservices architecture (gelecek)",
+      "Queue system for heavy tasks (Bull/BullMQ)"
+    ],
+    "storage": [
+      "CDN for static assets",
+      "Object storage for files",
+      "Separate database for analytics"
+    ]
+  },
+
+  "future_enhancements": {
+    "phase_2": [
+      "Mobile app (React Native)",
+      "Advanced analytics and BI",
+      "AI-powered insights",
+      "Chatbot for support",
+      "Video conferencing integration",
+      "E-signature integration",
+      "Blockchain for document verification",
+      "Multi-tenancy",
+      "White-labeling",
+      "Marketplace for templates/plugins"
+    ]
+  },
+
+  "success_metrics": {
+    "technical": [
+      "Page load time < 2 seconds",
+      "API response time < 200ms (p95)",
+      "Uptime > 99.9%",
+      "Test coverage > 70%",
+      "Lighthouse score > 90"
+    ],
+    "business": [
+      "User adoption rate",
+      "Daily active users",
+      "Feature usage statistics",
+      "User satisfaction score",
+      "Support ticket volume"
+    ]
+  },
+
+  "launch_checklist": [
+    "✓ All features implemented and tested",
+    "✓ Security audit completed",
+    "✓ Performance optimization done",
+    "✓ Documentation completed",
+    "✓ User acceptance testing passed",
+    "✓ Backup system configured",
+    "✓ Monitoring tools setup",
+    "✓ SSL certificate installed",
+    "✓ Domain configured",
+    "✓ Email templates ready",
+    "✓ Sample data seeded",
+    "✓ User training materials prepared",
+    "✓ Support channels established",
+    "✓ Marketing materials ready",
+    "✓ Go-live date communicated"
+  ]
+}
+      
