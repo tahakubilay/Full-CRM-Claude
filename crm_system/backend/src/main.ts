@@ -11,7 +11,7 @@ import dotenv from 'dotenv';
 // Import routes
 import authRoutes from './modules/auth/auth.routes';
 import companyRoutes from './modules/companies/company.routes';
-import brandRoutes from './modules/brands/brand.routes';
+import brandRoutes from './modules/brands/brands.routes';
 import branchRoutes from './modules/branches/branch.routes';
 import personRoutes from './modules/people/person.routes';
 import documentRoutes from './modules/documents/document.routes';
@@ -22,6 +22,8 @@ import presentationRoutes from './modules/presentations/presentation.routes';
 import dashboardRoutes from './modules/dashboard/dashboard.routes';
 import settingsRoutes from './modules/settings/settings.routes';
 import uploadRoutes from './modules/upload/upload.routes';
+import { BrandsModule } from './modules/brands/brands.module'; // ADD THIS
+
 
 // Import middleware
 import { errorHandler } from './common/middlewares/error.middleware';
